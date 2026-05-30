@@ -11,6 +11,12 @@ node_modules
 npm-debug.log
 yarn-error.log
 
+# Python backend
+backend/.env
+backend/.venv/
+backend/__pycache__/
+backend/**/*.pyc
+
 # IDEs and editors
 .idea/
 .project
