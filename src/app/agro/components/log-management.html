@@ -1,18 +1,31 @@
 <div class="verify-container">
   <header class="hero">
     <h1 class="text-2xl font-bold text-gray-800">Gestión de Lotes</h1>
-    <p class="text-gray-500 text-sm mt-1">Administra tus lotes activos de producción</p>
+    <p class="text-gray-500 text-sm mt-1">
+      Administra tus lotes activos de producción
+    </p>
   </header>
 
   <div class="complejo-card">
     <div
-      class="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      class="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+    >
       <div>
         <h2 class="text-lg font-semibold text-gray-800">Tus lotes</h2>
-        <p class="text-sm text-gray-500">{{ marketService.lots().length }} lotes registrados</p>
+        <p class="text-sm text-gray-500">
+          {{ marketService.lots().length }}
+          lotes registrados
+        </p>
       </div>
-      <button pButton pRipple label="Nuevo lote" icon="pi pi-plus"
-        class="!bg-[var(--primary)] !border-[var(--primary)]" (click)="showNewLotDialog()"></button>
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Nuevo lote"
+        icon="pi pi-plus"
+        class="!bg-[var(--primary)] !border-[var(--primary)]"
+        (click)="showNewLotDialog()"
+      ></button>
     </div>
     <div class="overflow-x-auto">
       <p-table
@@ -26,14 +39,26 @@
         [scrollable]="true"
         [scrollHeight]="'flex'"
         [currentPageReportTemplate]="'{first} - {last} de {totalRecords}'"
-        styleClass="p-datatable-sm p-datatable-striped">
+        styleClass="p-datatable-sm p-datatable-striped"
+      >
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="product">Producto <p-sortIcon field="product" /></th>
-            <th pSortableColumn="producer">Productor <p-sortIcon field="producer" /></th>
+            <th pSortableColumn="product">
+              Producto <p-sortIcon field="product" />
+            </th>
+            <th pSortableColumn="producer">
+              Productor <p-sortIcon field="producer" />
+            </th>
             <th>Progreso</th>
-            <th pSortableColumn="currentKilos">Kilos <p-sortIcon field="currentKilos" /></th>
-            <th pSortableColumn="basePrice">Precio <p-sortIcon field="basePrice" /></th>
+            <th pSortableColumn="currentKilos">
+              Kilos <p-sortIcon field="currentKilos" />
+            </th>
+            <th pSortableColumn="basePrice">
+              Precio <p-sortIcon field="basePrice" />
+            </th>
+            <th pSortableColumn="deadline">
+              Fecha límite <p-sortIcon field="deadline" />
+            </th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
@@ -44,35 +69,67 @@
             <td class="text-gray-500 text-sm">{{ lot.producer }}</td>
             <td>
               <div class="flex items-center gap-2">
-                <p-progressBar [value]="progress(lot)" [style]="{ height: '8px', width: '80px' }"
-                  styleClass="rounded-full"></p-progressBar>
+                <p-progressBar
+                  [value]="progress(lot)"
+                  [style]="{ height: '8px', width: '80px' }"
+                  styleClass="rounded-full"
+                ></p-progressBar>
                 <span class="text-xs text-gray-500">{{ progress(lot) }}%</span>
               </div>
             </td>
-            <td class="text-sm">{{ lot.currentKilos }} / {{ lot.targetKilos }} kg</td>
-            <td class="text-sm">\${{ lot.basePrice }}/kg</td>
+            <td class="text-sm">
+              {{ lot.currentKilos }}
+              / {{ lot.targetKilos }} kg
+            </td>
+            <td class="text-sm">\${{ lot.basePrice }} /kg</td>
+            <td class="text-sm">{{ lot.deadline | date:'mediumDate' }}</td>
             <td>
-              <p-tag [value]="progress(lot) >= 100 ? 'Completado' : 'Activo'"
-                [severity]="progress(lot) >= 100 ? 'success' : 'info'" styleClass="text-xs" />
+              <p-tag
+                [value]="progress(lot) >= 100 ? 'Completado' : 'Activo'"
+                [severity]="progress(lot) >= 100 ? 'success' : 'info'"
+                styleClass="text-xs"
+              />
             </td>
             <td>
               <div class="flex items-center gap-1">
-                <button pButton pRipple icon="pi pi-chart-line" styleClass="p-button-rounded p-button-text p-button-sm"
-                  pTooltip="Ver predicción IA" tooltipPosition="top" (click)="goToPredict(lot.id)"></button>
-                <button pButton pRipple icon="pi pi-external-link"
-                  styleClass="p-button-rounded p-button-text p-button-sm" pTooltip="Ver detalle" tooltipPosition="top"
-                  (click)="goToDetail(lot.id)"></button>
+                <button
+                  type="button"
+                  pButton
+                  pRipple
+                  icon="pi pi-chart-line"
+                  styleClass="p-button-rounded p-button-text p-button-sm"
+                  pTooltip="Ver predicción IA"
+                  tooltipPosition="top"
+                  (click)="goToPredict(lot.id)"
+                ></button>
+                <button
+                  type="button"
+                  pButton
+                  pRipple
+                  icon="pi pi-external-link"
+                  styleClass="p-button-rounded p-button-text p-button-sm"
+                  pTooltip="Ver detalle"
+                  tooltipPosition="top"
+                  (click)="goToDetail(lot.id)"
+                ></button>
               </div>
             </td>
           </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="7" class="text-center py-12">
+            <td colspan="8" class="text-center py-12">
               <i class="pi pi-inbox text-3xl text-gray-300 mb-2 block"></i>
               <p class="text-gray-400">No hay lotes registrados</p>
-              <button pButton pRipple label="Crear primer lote" icon="pi pi-plus"
-                styleClass="p-button-sm p-button-text mt-2" (click)="showNewLotDialog()"></button>
+              <button
+                type="button"
+                pButton
+                pRipple
+                label="Crear primer lote"
+                icon="pi pi-plus"
+                styleClass="p-button-sm p-button-text mt-2"
+                (click)="showNewLotDialog()"
+              ></button>
             </td>
           </tr>
         </ng-template>
@@ -80,7 +137,12 @@
     </div>
   </div>
 
-  <p-dialog [(visible)]="newLotDialogVisible" [modal]="true" [style]="{ width: '32rem' }" [draggable]="false">
+  <p-dialog
+    [(visible)]="newLotDialogVisible"
+    [modal]="true"
+    [style]="{ width: '32rem' }"
+    [draggable]="false"
+  >
     <ng-template pTemplate="header">
       <div class="flex items-center gap-2">
         <i class="pi pi-plus-circle text-[var(--primary)]"></i>
@@ -89,37 +151,94 @@
     </ng-template>
     <div class="space-y-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Producto</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Producto</label
+        >
         <p-iconField iconPosition="left">
           <p-inputIcon><i class="pi pi-tag"></i></p-inputIcon>
-          <input type="text" pInputText [(ngModel)]="newLot.product" class="w-full" placeholder="Ej: Arroz Orgánico" />
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="newLot.product"
+            class="w-full"
+            placeholder="Ej: Arroz Orgánico"
+          >
         </p-iconField>
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Productor</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Productor</label
+        >
         <p-iconField iconPosition="left">
           <p-inputIcon><i class="pi pi-user"></i></p-inputIcon>
-          <input type="text" pInputText [(ngModel)]="newLot.producer" class="w-full"
-            placeholder="Ej: Cooperativa La Esperanza" />
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="newLot.producer"
+            class="w-full"
+            placeholder="Ej: Cooperativa La Esperanza"
+          >
         </p-iconField>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Meta (kg)</label>
-          <p-inputNumber [(ngModel)]="newLot.targetKilos" [min]="1" [showButtons]="true" styleClass="w-full" />
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Meta (kg)</label
+          >
+          <p-inputNumber
+            [(ngModel)]="newLot.targetKilos"
+            [min]="1"
+            [showButtons]="true"
+            styleClass="w-full"
+          />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Precio base/kg</label>
-          <p-inputNumber [(ngModel)]="newLot.basePrice" [min]="0.01" [mode]="'currency'" [currency]="'USD'"
-            [showButtons]="true" styleClass="w-full" />
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Precio base/kg</label
+          >
+          <p-inputNumber
+            [(ngModel)]="newLot.basePrice"
+            [min]="0.01"
+            [mode]="'currency'"
+            [currency]="'USD'"
+            [showButtons]="true"
+            styleClass="w-full"
+          />
         </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Fecha límite de venta</label
+        >
+        <p-datepicker
+          [(ngModel)]="newLot.deadline"
+          [minDate]="today"
+          dateFormat="dd/mm/yy"
+          styleClass="w-full"
+          class="w-full"
+          [showIcon]="true"
+        />
       </div>
     </div>
     <ng-template pTemplate="footer">
-      <button pButton pRipple label="Cancelar" styleClass="p-button-text"
-        (click)="newLotDialogVisible = false"></button>
-      <button pButton pRipple label="Crear lote" icon="pi pi-check" [disabled]="!isNewLotValid()"
-        class="!bg-[var(--primary)] !border-[var(--primary)]" (click)="createLot()"></button>
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Cancelar"
+        styleClass="p-button-text"
+        (click)="newLotDialogVisible = false"
+      ></button>
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Crear lote"
+        icon="pi pi-check"
+        [disabled]="!isNewLotValid()"
+        class="!bg-[var(--primary)] !border-[var(--primary)]"
+        (click)="createLot()"
+      ></button>
     </ng-template>
   </p-dialog>
 </div>

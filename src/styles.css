@@ -2,8 +2,8 @@
 @import "primeicons/primeicons.css";
 
 :root {
-  --primary: #61BAC2;
-  --secondary: #C29A61;
+  --primary: #61bac2;
+  --secondary: #c29a61;
 }
 
 @keyframes heroFadeDown {
@@ -41,8 +41,8 @@
 
 .verify-container {
   max-width: 1200px;
-  margin: 0 auto;
   padding: 1rem 1.5rem;
+  margin: 0 auto;
 }
 
 @media (min-width: 768px) {
@@ -65,33 +65,35 @@
 }
 
 .complejo-card {
-  animation: fadeInUp 0.5s ease-out 0.2s both;
+  overflow: hidden;
   background: white;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.5s ease-out 0.2s both;
 }
 
-::ng-deep .complejo-card .p-datatable .p-datatable-thead > tr > th {
-  background: transparent;
-  border-bottom: 2px solid var(--primary);
-  color: var(--primary);
-  font-weight: 600;
+.complejo-card .p-datatable .p-datatable-thead > tr > th {
+  padding: 0.875rem 1rem;
   font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 0.875rem 1rem;
+  background: transparent;
+  border-bottom: 2px solid var(--primary);
 }
 
-::ng-deep .complejo-card .p-datatable .p-datatable-tbody > tr > td {
+.complejo-card .p-datatable .p-datatable-tbody > tr > td {
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
 }
 
-::ng-deep .complejo-card .p-datatable .p-datatable-tbody > tr {
+.complejo-card .p-datatable .p-datatable-tbody > tr {
   transition: background-color 0.15s ease;
 }
 
-::ng-deep .complejo-card .p-datatable .p-datatable-tbody > tr:hover {
+.complejo-card .p-datatable .p-datatable-tbody > tr:hover {
   background: rgba(97, 186, 194, 0.05);
 }
