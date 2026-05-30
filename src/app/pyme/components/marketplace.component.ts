@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    inject,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -8,8 +13,10 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { RippleModule } from 'primeng/ripple';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 import type { Lot } from '../../core/models';
 import { MarketService } from '../../core/services/market.service';
+import { RoleService } from '../../core/services/role.service';
 import { timeRemaining } from '../../core/time-remaining';
 
 @Component({
@@ -23,6 +30,7 @@ import { timeRemaining } from '../../core/time-remaining';
         ProgressBarModule,
         DialogModule,
         InputNumberModule,
+        TooltipModule,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -30,6 +38,9 @@ export class MarketplaceComponent {
     marketService = inject(MarketService);
     private readonly messageService = inject(MessageService);
     private readonly router = inject(Router);
+    private readonly roleService = inject(RoleService);
+
+    readonly hasUserProfile = computed(() => this.roleService.hasUserProfile());
 
     commitDialogVisible = false;
     selectedLot: Lot | null = null;
@@ -57,7 +68,7 @@ export class MarketplaceComponent {
 
     openCommitDialog(lot: Lot, event: Event) {
         event.stopPropagation();
-        if (this.isFull(lot)) {
+        if (this.isFull(lot) || !this.hasUserProfile()) {
             return;
         }
         this.selectedLot = lot;

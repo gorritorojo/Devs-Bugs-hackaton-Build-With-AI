@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    inject,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -15,6 +21,7 @@ import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import type { Lot } from '../../core/models';
 import { MarketService } from '../../core/services/market.service';
+import { RoleService } from '../../core/services/role.service';
 import { timeRemaining } from '../../core/time-remaining';
 
 @Component({
@@ -33,7 +40,7 @@ import { timeRemaining } from '../../core/time-remaining';
         InputTextModule,
         InputNumberModule,
         DatePickerModule,
-        // DatePipe,
+        DatePipe,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -41,6 +48,9 @@ export class LotManagementComponent {
     marketService = inject(MarketService);
     private readonly messageService = inject(MessageService);
     private readonly router = inject(Router);
+    private readonly roleService = inject(RoleService);
+
+    readonly hasUserProfile = computed(() => this.roleService.hasUserProfile());
 
     today = new Date();
 
@@ -70,10 +80,13 @@ export class LotManagementComponent {
     }
 
     goToDetail(lotId: string) {
-        this.router.navigate(['/pyme/marketplace', lotId]);
+        this.router.navigate(['/agro/lots', lotId]);
     }
 
     showNewLotDialog() {
+        if (!this.hasUserProfile()) {
+            return;
+        }
         this.newLot = {
             product: '',
             producer: '',

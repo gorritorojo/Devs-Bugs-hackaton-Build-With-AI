@@ -21,8 +21,15 @@
         type="button"
         pButton
         pRipple
-        label="Nuevo lote"
+        [label]="hasUserProfile() ? 'Nuevo lote' : 'Nuevo lote'"
         icon="pi pi-plus"
+        [disabled]="!hasUserProfile()"
+        [pTooltip]="
+          hasUserProfile()
+            ? ''
+            : 'Completa tu perfil para crear lotes'
+        "
+        tooltipPosition="top"
         class="!bg-[var(--primary)] !border-[var(--primary)]"
         (click)="showNewLotDialog()"
       ></button>
@@ -38,6 +45,12 @@
           pRipple
           label="Crear primer lote"
           icon="pi pi-plus"
+          [disabled]="!hasUserProfile()"
+          [pTooltip]="
+            hasUserProfile()
+              ? ''
+              : 'Completa tu perfil para crear lotes'
+          "
           styleClass="p-button-sm p-button-text mt-2"
           (click)="showNewLotDialog()"
         ></button>

@@ -76,7 +76,13 @@
               pRipple
               [label]="isFull(lot) ? 'Completado' : 'Unirme'"
               [icon]="isFull(lot) ? 'pi pi-check' : 'pi pi-shopping-cart'"
-              [disabled]="isFull(lot)"
+              [disabled]="isFull(lot) || !hasUserProfile()"
+              [pTooltip]="
+                !hasUserProfile()
+                  ? 'Completa tu perfil para unirte a lotes'
+                  : ''
+              "
+              tooltipPosition="top"
               styleClass="p-button-sm"
               class="!bg-[var(--primary)] !border-[var(--primary)]"
               (click)="openCommitDialog(lot, $event)"

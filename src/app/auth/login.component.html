@@ -15,32 +15,239 @@
       </div>
     </ng-template>
     <ng-template pTemplate="content">
-      <p class="text-center text-gray-500 text-sm mb-6">
-        Selecciona tu perfil para continuar
-      </p>
-      <div class="flex flex-col gap-3">
-        <button
-          type="button"
-          pButton
-          pRipple
-          class="w-full"
-          styleClass="p-button-outlined py-3"
-          (click)="login('pyme')"
-        >
-          <i class="pi pi-shop mr-2"></i>
-          Entrar como PYME
-        </button>
-        <button
-          type="button"
-          pButton
-          pRipple
-          class="w-full py-3 !bg-[var(--secondary)] !border-[var(--secondary)]"
-          (click)="login('agro')"
-        >
-          <i class="pi pi-sun mr-2"></i>
-          Entrar como Productor
-        </button>
+      @if (step() === 1) {
+      <div>
+        <p class="text-center text-gray-500 text-sm mb-6">
+          Selecciona tu perfil para continuar
+        </p>
+        <div class="flex flex-col gap-3">
+          <button
+            type="button"
+            pButton
+            pRipple
+            class="w-full"
+            styleClass="p-button-outlined py-3"
+            (click)="selectRole('pyme')"
+          >
+            <i class="pi pi-shop mr-2"></i>
+            Entrar como PYME
+          </button>
+          <button
+            type="button"
+            pButton
+            pRipple
+            class="w-full py-3 !bg-[var(--secondary)] !border-[var(--secondary)]"
+            (click)="selectRole('agro')"
+          >
+            <i class="pi pi-sun mr-2"></i>
+            Entrar como Productor
+          </button>
+        </div>
       </div>
+      } @else if (step() === 2) {
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <button
+            type="button"
+            pButton
+            pRipple
+            icon="pi pi-arrow-left"
+            styleClass="p-button-text p-button-sm p-button-rounded"
+            (click)="goBack()"
+          ></button>
+          <p class="text-sm text-gray-500">
+            Perfil:
+            <strong class="text-[var(--primary)]"
+              >{{ selectedRole() === 'pyme' ? 'PYME' : 'Productor' }}</strong
+            >
+          </p>
+        </div>
+        <p class="text-center text-gray-500 text-sm mb-5">
+          Datos requeridos para continuar
+        </p>
+        @if (selectedRole() === 'pyme') {
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Correo electronico
+              <span class="text-red-500">*</span></label
+            >
+            <input
+              type="email"
+              pInputText
+              [(ngModel)]="email"
+              class="w-full"
+              placeholder="correo@empresa.com"
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Nombre de la empresa
+              <span class="text-red-500">*</span></label
+            >
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="companyName"
+              class="w-full"
+              placeholder="Ej: Distribuidora El Sol"
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Nombre de contacto
+              <span class="text-red-500">*</span></label
+            >
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="contactName"
+              class="w-full"
+              placeholder="Ej: Maria Perez"
+            >
+          </div>
+        </div>
+        } @else {
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Nombre completo
+              <span class="text-red-500">*</span></label
+            >
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="contactName"
+              class="w-full"
+              placeholder="Ej: Juan Rodriguez"
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Numero de celular
+              <span class="text-red-500">*</span></label
+            >
+            <input
+              type="tel"
+              pInputText
+              [(ngModel)]="phone"
+              class="w-full"
+              placeholder="Ej: +57 300 123 4567"
+            >
+          </div>
+        </div>
+        }
+        <div class="mt-6">
+          <button
+            type="button"
+            pButton
+            pRipple
+            label="Continuar"
+            icon="pi pi-arrow-right"
+            [disabled]="!isUserFormValid()"
+            class="w-full !bg-[var(--primary)] !border-[var(--primary)]"
+            (click)="submitUserForm()"
+          ></button>
+        </div>
+      </div>
+      } @else {
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <button
+            type="button"
+            pButton
+            pRipple
+            icon="pi pi-arrow-left"
+            styleClass="p-button-text p-button-sm p-button-rounded"
+            (click)="goBack()"
+          ></button>
+          <p class="text-sm text-gray-500">
+            Perfil:
+            <strong class="text-[var(--primary)]"
+              >{{ selectedRole() === 'pyme' ? 'PYME' : 'Productor' }}</strong
+            >
+          </p>
+        </div>
+        <p class="text-center text-gray-500 text-sm mb-5">
+          Cuentanos sobre tu negocio
+          <span class="text-xs text-gray-400 block">(opcional)</span>
+        </p>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              {{ selectedRole() === 'agro'
+                  ? 'Tipo de produccion'
+                  : 'Tipo de negocio' }}
+            </label>
+            <p-select
+              [options]="areaOptions()"
+              [(ngModel)]="area"
+              placeholder="Selecciona..."
+              class="w-full"
+              styleClass="w-full"
+              scrollHeight="220px"
+            />
+            @if (area === 'Otro') {
+            <textarea
+              rows="2"
+              pTextarea
+              [(ngModel)]="customArea"
+              class="w-full mt-2"
+              placeholder="Especifica..."
+            ></textarea>
+            }
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              {{ selectedRole() === 'agro'
+                  ? 'Que productos manejas?'
+                  : 'Que productos buscas?' }}
+            </label>
+            <textarea
+              rows="2"
+              pTextarea
+              [(ngModel)]="products"
+              class="w-full"
+              placeholder="Ej: Arroz organico, miel de abeja..."
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Tamano del negocio</label
+            >
+            <p-select
+              [options]="sizeOptions()"
+              [(ngModel)]="businessSize"
+              placeholder="Selecciona..."
+              class="w-full"
+              styleClass="w-full"
+              scrollHeight="220px"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 mt-6">
+          <button
+            type="button"
+            pButton
+            pRipple
+            label="Guardar y continuar"
+            icon="pi pi-check"
+            [disabled]="!isProfileValid()"
+            class="w-full !bg-[var(--primary)] !border-[var(--primary)]"
+            (click)="submitProfile()"
+          ></button>
+          <button
+            type="button"
+            pButton
+            pRipple
+            label="Omitir por ahora"
+            icon="pi pi-forward"
+            styleClass="p-button-text p-button-sm w-full"
+            (click)="skipProfile()"
+          ></button>
+        </div>
+      </div>
+      }
     </ng-template>
   </p-card>
 </div>

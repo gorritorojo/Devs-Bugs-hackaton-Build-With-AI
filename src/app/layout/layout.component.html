@@ -1,19 +1,26 @@
 <div class="min-h-screen flex flex-col bg-gray-50">
   <p-toast position="top-right" />
-  <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+  <header
+    class="shadow-sm border-b border-gray-200 sticky top-0 z-40"
+    [style.background]="
+      'linear-gradient(135deg, ' + accentColor() + '08, ' + accentColor() + '15)'
+    "
+  >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <a
           routerLink="/"
           class="flex items-center gap-2 no-underline flex-shrink-0"
         >
-          <i class="pi pi-users text-2xl text-[var(--primary)]"></i>
-          <span class="text-xl font-bold hidden sm:inline text-[var(--primary)]"
+          <i class="pi pi-users text-2xl" [style.color]="accentColor()"></i>
+          <span
+            class="text-xl font-bold hidden sm:inline"
+            [style.color]="accentColor()"
             >CrowdBuy</span
           >
         </a>
         <nav class="flex items-center gap-1">
-          @for (item of navItems; track item.label) {
+          @for (item of navItems(); track item.label) {
           <a
             [routerLink]="item.route"
             routerLinkActive="bg-gray-100 text-gray-900"
@@ -45,6 +52,25 @@
       </div>
     </div>
   </header>
+  @if (currentRole && !hasUserProfile()) {
+  <div class="bg-amber-50 border-b border-amber-200">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+      <div class="flex items-center gap-2 text-sm text-amber-700">
+        <i class="pi pi-exclamation-triangle"></i>
+        <span>
+          Completa el perfil de tu negocio para desbloquear todas las
+          funcionalidades.
+        </span>
+      </div>
+      <a
+        routerLink="/auth"
+        class="text-sm font-medium text-amber-700 hover:text-amber-800 underline flex-shrink-0"
+      >
+        Completar perfil
+      </a>
+    </div>
+  </div>
+  }
   <main class="flex-1">
     <router-outlet />
   </main>
@@ -52,8 +78,8 @@
     <div class="max-w-7xl mx-auto px-4 py-6">
       <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-2">
-          <i class="pi pi-users text-[var(--primary)]"></i>
-          <span class="text-sm font-semibold text-[var(--primary)]"
+          <i class="pi pi-users" [style.color]="accentColor()"></i>
+          <span class="text-sm font-semibold" [style.color]="accentColor()"
             >CrowdBuy</span
           >
         </div>

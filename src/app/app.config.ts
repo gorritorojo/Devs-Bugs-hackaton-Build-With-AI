@@ -7,6 +7,7 @@ import { provideRouter, type Routes } from '@angular/router';
 import Aura from '@primeng/themes/aura';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
+import { roleGuard } from './core/guards/role.guard';
 
 const routes: Routes = [
     { path: '', redirectTo: '/auth', pathMatch: 'full' },
@@ -24,11 +25,13 @@ const routes: Routes = [
                 path: 'pyme',
                 loadChildren: () =>
                     import('./pyme/pyme.routes').then((m) => m.pymeRoutes),
+                canActivateChild: [roleGuard('pyme')],
             },
             {
                 path: 'agro',
                 loadChildren: () =>
                     import('./agro/agro.routes').then((m) => m.agroRoutes),
+                canActivateChild: [roleGuard('agro')],
             },
         ],
     },
