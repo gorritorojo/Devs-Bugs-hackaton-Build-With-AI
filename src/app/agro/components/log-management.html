@@ -27,71 +27,80 @@
         (click)="showNewLotDialog()"
       ></button>
     </div>
-    <div class="overflow-x-auto">
-      <p-table
-        [value]="marketService.lots()"
-        [paginator]="true"
-        [rows]="5"
-        [rowsPerPageOptions]="[5, 10, 20]"
-        [sortField]="'product'"
-        [sortOrder]="1"
-        [responsiveLayout]="'scroll'"
-        [scrollable]="true"
-        [scrollHeight]="'flex'"
-        [currentPageReportTemplate]="'{first} - {last} de {totalRecords}'"
-        styleClass="p-datatable-sm p-datatable-striped"
-      >
-        <ng-template pTemplate="header">
-          <tr>
-            <th pSortableColumn="product">
-              Producto <p-sortIcon field="product" />
-            </th>
-            <th pSortableColumn="producer">
-              Productor <p-sortIcon field="producer" />
-            </th>
-            <th>Progreso</th>
-            <th pSortableColumn="currentKilos">
-              Kilos <p-sortIcon field="currentKilos" />
-            </th>
-            <th pSortableColumn="basePrice">
-              Precio <p-sortIcon field="basePrice" />
-            </th>
-            <th pSortableColumn="deadline">
-              Fecha límite <p-sortIcon field="deadline" />
-            </th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-lot>
-          <tr>
-            <td class="font-medium">{{ lot.product }}</td>
-            <td class="text-gray-500 text-sm">{{ lot.producer }}</td>
-            <td>
-              <div class="flex items-center gap-2">
+    <div class="p-6">
+      @if (marketService.lots().length === 0) {
+      <div class="text-center py-12">
+        <i class="pi pi-inbox text-3xl text-gray-300 mb-2 block"></i>
+        <p class="text-gray-400">No hay lotes registrados</p>
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="Crear primer lote"
+          icon="pi pi-plus"
+          styleClass="p-button-sm p-button-text mt-2"
+          (click)="showNewLotDialog()"
+        ></button>
+      </div>
+      } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (lot of marketService.lots(); track lot.id) {
+        <div
+          class="bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-200 overflow-hidden"
+        >
+          <div class="p-5">
+            <div class="flex justify-between items-start mb-3">
+              <div class="flex-1 min-w-0">
+                <h3 class="text-lg font-semibold text-gray-800 truncate">
+                  {{ lot.product }}
+                </h3>
+                <p-tag
+                  [value]="lot.producer"
+                  severity="info"
+                  styleClass="text-xs mt-1"
+                />
+              </div>
+              <p-tag
+                [value]="isFull(lot) ? 'Completado' : 'Activo'"
+                [severity]="isFull(lot) ? 'success' : 'info'"
+                styleClass="text-xs ml-2 flex-shrink-0"
+              />
+            </div>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-500">Progreso</span>
+                  <span class="font-medium text-gray-700"
+                    >{{ progress(lot) }}%</span
+                  >
+                </div>
                 <p-progressBar
                   [value]="progress(lot)"
-                  [style]="{ height: '8px', width: '80px' }"
+                  [style]="{ height: '8px' }"
                   styleClass="rounded-full"
-                ></p-progressBar>
-                <span class="text-xs text-gray-500">{{ progress(lot) }}%</span>
+                />
               </div>
-            </td>
-            <td class="text-sm">
-              {{ lot.currentKilos }}
-              / {{ lot.targetKilos }} kg
-            </td>
-            <td class="text-sm">\${{ lot.basePrice }} /kg</td>
-            <td class="text-sm">{{ lot.deadline | date:'mediumDate' }}</td>
-            <td>
-              <p-tag
-                [value]="progress(lot) >= 100 ? 'Completado' : 'Activo'"
-                [severity]="progress(lot) >= 100 ? 'success' : 'info'"
-                styleClass="text-xs"
-              />
-            </td>
-            <td>
-              <div class="flex items-center gap-1">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-500">Kilos</span>
+                <span class="font-medium text-gray-700"
+                  >{{ lot.currentKilos }}
+                  / {{ lot.targetKilos }} kg</span
+                >
+              </div>
+              <div class="flex justify-between items-center pt-1">
+                <span class="text-sm text-gray-500"
+                  >Precio
+                  <strong class="text-gray-700"
+                    >\${{ lot.basePrice }} /kg</strong
+                  ></span
+                >
+                <p-tag
+                  [value]="deadlineInfo(lot).label"
+                  [severity]="deadlineInfo(lot).severity"
+                  styleClass="text-xs"
+                />
+              </div>
+              <div class="flex justify-end gap-1 pt-2 border-t border-gray-100">
                 <button
                   type="button"
                   pButton
@@ -113,27 +122,12 @@
                   (click)="goToDetail(lot.id)"
                 ></button>
               </div>
-            </td>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-          <tr>
-            <td colspan="8" class="text-center py-12">
-              <i class="pi pi-inbox text-3xl text-gray-300 mb-2 block"></i>
-              <p class="text-gray-400">No hay lotes registrados</p>
-              <button
-                type="button"
-                pButton
-                pRipple
-                label="Crear primer lote"
-                icon="pi pi-plus"
-                styleClass="p-button-sm p-button-text mt-2"
-                (click)="showNewLotDialog()"
-              ></button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+      }
     </div>
   </div>
 

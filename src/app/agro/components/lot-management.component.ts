@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,18 +11,17 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { RippleModule } from 'primeng/ripple';
-import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import type { Lot } from '../../core/models';
 import { MarketService } from '../../core/services/market.service';
+import { timeRemaining } from '../../core/time-remaining';
 
 @Component({
     selector: 'app-lot-management',
     templateUrl: 'log-management.html',
     imports: [
         FormsModule,
-        TableModule,
         ProgressBarModule,
         TagModule,
         ButtonModule,
@@ -35,7 +33,7 @@ import { MarketService } from '../../core/services/market.service';
         InputTextModule,
         InputNumberModule,
         DatePickerModule,
-        DatePipe,
+        // DatePipe,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -57,6 +55,14 @@ export class LotManagementComponent {
 
     progress(lot: Lot): number {
         return Math.round((lot.currentKilos / lot.targetKilos) * 100);
+    }
+
+    isFull(lot: Lot): boolean {
+        return lot.currentKilos >= lot.targetKilos;
+    }
+
+    deadlineInfo(lot: Lot) {
+        return timeRemaining(lot.deadline);
     }
 
     goToPredict(_lotId: string) {
