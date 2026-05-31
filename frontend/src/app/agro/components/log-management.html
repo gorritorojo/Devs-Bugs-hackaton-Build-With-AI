@@ -64,6 +64,7 @@
         @for (lot of marketService.lots(); track lot.id) {
         <div
           class="bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-200 overflow-hidden"
+          [style.opacity]="lot.status === 'deactivated' ? '0.55' : '1'"
         >
           <div class="p-5">
             <div class="flex justify-between items-start mb-3">
@@ -78,8 +79,8 @@
                 />
               </div>
               <p-tag
-                [value]="isFull(lot) ? 'Completado' : 'Activo'"
-                [severity]="isFull(lot) ? 'success' : 'info'"
+                [value]="statusLabel(lot)"
+                [severity]="statusSeverity(lot)"
                 styleClass="text-xs ml-2 flex-shrink-0"
               />
             </div>
@@ -118,6 +119,17 @@
                 />
               </div>
               <div class="flex justify-end gap-1 pt-2 border-t border-gray-100">
+                <button
+                  type="button"
+                  pButton
+                  pRipple
+                  icon="pi pi-eye-slash"
+                  styleClass="p-button-rounded p-button-text p-button-sm"
+                  [pTooltip]="lot.status === 'deactivated' ? 'Mostrar en el mercado' : 'Ocultar del mercado'"
+                  tooltipPosition="top"
+                  [style.opacity]="lot.status === 'deactivated' ? '1' : '0.5'"
+                  (click)="toggleVisibility(lot)"
+                ></button>
                 <button
                   type="button"
                   pButton

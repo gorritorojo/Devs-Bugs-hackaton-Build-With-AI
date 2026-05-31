@@ -66,7 +66,7 @@ export class LotManagementComponent implements OnInit {
 
     ngOnInit(): void {
         const userId = this.roleService.userId();
-        this.marketService.loadLots(false, userId ?? undefined);
+        this.marketService.loadLots(true, userId ?? undefined);
     }
 
     progress(lot: Lot): number {
@@ -79,6 +79,34 @@ export class LotManagementComponent implements OnInit {
 
     deadlineInfo(lot: Lot) {
         return timeRemaining(lot.deadline);
+    }
+
+    statusLabel(lot: Lot): string {
+        switch (lot.status) {
+            case 'completed':
+                return 'Completado';
+            case 'expired':
+                return 'Expirado';
+            case 'deactivated':
+                return 'Desactivado';
+            default:
+                return 'Activo';
+        }
+    }
+
+    statusSeverity(
+        lot: Lot
+    ): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
+        switch (lot.status) {
+            case 'completed':
+                return 'success';
+            case 'expired':
+                return 'danger';
+            case 'deactivated':
+                return 'secondary';
+            default:
+                return 'info';
+        }
     }
 
     goToPredict(lotId: string) {
@@ -145,6 +173,37 @@ export class LotManagementComponent implements OnInit {
             });
         } finally {
             this.creating.set(false);
+        }
+    }
+
+    async toggleVisibility(lot: Lot) {
+        const userId = this.roleService.userId();
+        if (!userId) {
+            return;
+        }
+        const newStatus =
+            lot.status === 'deactivated' ? 'active' : 'deactivated';
+        try {
+            await this.marketService.toggleLotStatus(lot.id, newStatus, userId);
+            this.messageService.add({
+                severity: 'success',
+                summary:
+                    newStatus === 'deactivated'
+                        ? 'Lote ocultado'
+                        : 'Lote visible',
+                detail:
+                    newStatus === 'deactivated'
+                        ? `"${lot.product}" ya no es visible en el mercado.`
+                        : `"${lot.product}" ahora es visible en el mercado.`,
+                life: 3000,
+            });
+        } catch {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudo cambiar la visibilidad del lote.',
+                life: 5000,
+            });
         }
     }
 }

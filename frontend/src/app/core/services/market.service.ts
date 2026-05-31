@@ -90,4 +90,19 @@ export class MarketService {
         this.lots.update((lots) => [...lots, lot]);
         return lot;
     }
+
+    async toggleLotStatus(
+        lotId: string,
+        status: string,
+        userId: string
+    ): Promise<Lot> {
+        const lot = await firstValueFrom(
+            this.http.patch<Lot>(`${this.apiUrl}/lots/${lotId}/status`, {
+                status,
+                userId,
+            })
+        );
+        this.lots.update((lots) => lots.map((l) => (l.id === lotId ? lot : l)));
+        return lot;
+    }
 }
