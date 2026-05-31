@@ -26,7 +26,7 @@ app = FastAPI(title="CrowdBuy API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origin_regex=".*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -41,6 +41,12 @@ class RegisterUser(BaseModel):
     phone: str | None = None
 
     model_config = {"populate_by_name": True}
+
+
+class LoginUser(BaseModel):
+    role: str
+    email: str | None = None
+    phone: str | None = None
 
 
 class UpdateProfile(BaseModel):
@@ -78,7 +84,7 @@ def db(database: bool = True):
 
 def execute(sql: str, params: tuple[Any, ...] = (), fetchone: bool = False):
     conn = db()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(dictionary=True, buffered=True)
     try:
         cursor.execute(sql, params)
         if cursor.with_rows:
@@ -290,6 +296,31 @@ def register(payload: RegisterUser):
     return user_to_api(user)
 
 
+@app.post("/auth/login")
+def login(payload: LoginUser):
+    if payload.role == "pyme":
+        if not payload.email:
+            raise HTTPException(status_code=400, detail="Email requerido para PYME")
+        user = execute(
+            "SELECT * FROM users WHERE role = %s AND email = %s",
+            (payload.role, payload.email),
+            fetchone=True,
+        )
+    else:
+        if not payload.phone:
+            raise HTTPException(
+                status_code=400, detail="Telefono requerido para Productor"
+            )
+        user = execute(
+            "SELECT * FROM users WHERE role = %s AND phone = %s",
+            (payload.role, payload.phone),
+            fetchone=True,
+        )
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return user_to_api(user)
+
+
 @app.put("/users/{user_id}/profile")
 def update_profile(user_id: str, payload: UpdateProfile):
     execute(
@@ -307,14 +338,26 @@ def update_profile(user_id: str, payload: UpdateProfile):
 
 
 @app.get("/lots")
-def list_lots(all: bool = False):
+def list_lots(all: bool = False, created_by: str = ""):
     refresh_lot_statuses()
     if all:
-        rows = execute("SELECT * FROM lots ORDER BY created_at DESC")
+        if created_by:
+            rows = execute(
+                "SELECT * FROM lots WHERE created_by = %s ORDER BY created_at DESC",
+                (created_by,),
+            )
+        else:
+            rows = execute("SELECT * FROM lots ORDER BY created_at DESC")
     else:
-        rows = execute(
-            "SELECT * FROM lots WHERE status = 'active' ORDER BY created_at DESC"
-        )
+        if created_by:
+            rows = execute(
+                "SELECT * FROM lots WHERE status = 'active' AND created_by = %s ORDER BY created_at DESC",
+                (created_by,),
+            )
+        else:
+            rows = execute(
+                "SELECT * FROM lots WHERE status = 'active' ORDER BY created_at DESC"
+            )
     return [lot_to_api(row) for row in rows]
 
 
@@ -403,7 +446,20 @@ def prediction(lot_id: str):
             "createdAt": iso(existing["created_at"]),
         }
 
-    labels = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+    labels = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic",
+    ]
     datasets = [
         {
             "label": "Historico",
