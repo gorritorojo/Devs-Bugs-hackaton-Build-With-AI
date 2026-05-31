@@ -1,0 +1,40 @@
+============================================================
+  MODELO DE PREDICCIÓN DE DEMANDA — TRIGO
+============================================================
+  Entrenado: 2026-05-31 04:11
+  Algoritmo: Ridge Regression
+  Historial: 50 meses
+
+  MÉTRICAS DE EVALUACIÓN
+  ─────────────────────────────────────
+  Train R²:  0.9720
+  Test  R²:  0.9028
+  Test  MAE: 13,085 kg
+  Test  MAPE:8.7%
+  CV R²:     0.9333 ± 0.0214
+
+  FEATURES MÁS INFLUYENTES
+  ─────────────────────────────────────
+  demanda_total_kg                    +23533.53
+  semestre                            +11991.48
+  factor_estacional                   -8025.22
+  trimestre                           -7923.27
+  n_lotes_activos                     +7846.55
+  demanda_promedio_por_lote_kg        +6747.32
+
+  CÓMO USAR EL MODELO
+  ─────────────────────────────────────
+  import joblib, numpy as np
+  pipeline = joblib.load('saved_model/model.joblib')
+  X_nuevo  = np.array([[mes_del_año, semestre, trimestre,
+             mes_idx, precio, n_lotes, tasa, estacional,
+             demanda_actual, demanda_prom, mes_sin, mes_cos]])
+  prediccion_kg = pipeline.predict(X_nuevo)[0]
+
+  INTERPRETACIÓN PARA AGROS
+  ─────────────────────────────────────
+  Si prediccion_kg > demanda_actual * 1.10 → mercado en alza
+  → Recomendación: ampliar volumen de lotes el próximo mes
+  Si prediccion_kg < demanda_actual * 0.90 → mercado a la baja
+  → Recomendación: mantener o reducir lotes; diversificar producto
+============================================================

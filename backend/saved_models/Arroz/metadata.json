@@ -1,0 +1,58 @@
+{
+  "producto": "Arroz",
+  "entrenado_en": "2026-05-31T04:11:22.787356",
+  "algoritmo": "Ridge Regression (alpha=1.0)",
+  "features": [
+    "mes_del_año",
+    "semestre",
+    "trimestre",
+    "mes_idx",
+    "precio_promedio_bs_kg",
+    "n_lotes_activos",
+    "tasa_completado",
+    "factor_estacional",
+    "demanda_total_kg",
+    "demanda_promedio_por_lote_kg",
+    "mes_sin",
+    "mes_cos"
+  ],
+  "target": "demanda_siguiente_mes_kg",
+  "n_meses_historial": 50,
+  "split_train_test": "80/20 cronológico",
+  "metricas_train": {
+    "r2": 0.9744,
+    "mae": 3605.84,
+    "rmse": 4962.18,
+    "mape": 4.61
+  },
+  "metricas_test": {
+    "r2": 0.9621,
+    "mae": 6221.3,
+    "rmse": 7502.27,
+    "mape": 6.19
+  },
+  "cross_val_r2_mean": 0.9571,
+  "cross_val_r2_std": 0.0389,
+  "intercept": 85888.0422,
+  "coeficientes": {
+    "mes_del_año": -3328.4491,
+    "semestre": -3995.0974,
+    "trimestre": 4130.1032,
+    "mes_idx": 2437.2898,
+    "precio_promedio_bs_kg": -102.3597,
+    "n_lotes_activos": 6967.6464,
+    "tasa_completado": -10.3455,
+    "factor_estacional": -3598.0674,
+    "demanda_total_kg": 22909.1094,
+    "demanda_promedio_por_lote_kg": 4834.6351,
+    "mes_sin": -7017.4874,
+    "mes_cos": 2697.8488
+  },
+  "rango_datos": {
+    "demanda_min_kg": 37405.87,
+    "demanda_max_kg": 172853.29,
+    "demanda_media_kg": 89485.34,
+    "precio_min_bs_kg": 2.91,
+    "precio_max_bs_kg": 5.09
+  }
+}

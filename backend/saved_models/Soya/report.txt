@@ -1,0 +1,40 @@
+============================================================
+  MODELO DE PREDICCIÓN DE DEMANDA — SOYA
+============================================================
+  Entrenado: 2026-05-31 04:11
+  Algoritmo: Ridge Regression
+  Historial: 50 meses
+
+  MÉTRICAS DE EVALUACIÓN
+  ─────────────────────────────────────
+  Train R²:  0.9792
+  Test  R²:  0.9539
+  Test  MAE: 11,174 kg
+  Test  MAPE:4.9%
+  CV R²:     0.9386 ± 0.0199
+
+  FEATURES MÁS INFLUYENTES
+  ─────────────────────────────────────
+  demanda_total_kg                    +37830.66
+  n_lotes_activos                     +18549.92
+  demanda_promedio_por_lote_kg        +16988.71
+  semestre                            +16119.36
+  mes_idx                             +15499.66
+  mes_sin                             -11781.27
+
+  CÓMO USAR EL MODELO
+  ─────────────────────────────────────
+  import joblib, numpy as np
+  pipeline = joblib.load('saved_model/model.joblib')
+  X_nuevo  = np.array([[mes_del_año, semestre, trimestre,
+             mes_idx, precio, n_lotes, tasa, estacional,
+             demanda_actual, demanda_prom, mes_sin, mes_cos]])
+  prediccion_kg = pipeline.predict(X_nuevo)[0]
+
+  INTERPRETACIÓN PARA AGROS
+  ─────────────────────────────────────
+  Si prediccion_kg > demanda_actual * 1.10 → mercado en alza
+  → Recomendación: ampliar volumen de lotes el próximo mes
+  Si prediccion_kg < demanda_actual * 0.90 → mercado a la baja
+  → Recomendación: mantener o reducir lotes; diversificar producto
+============================================================

@@ -22,7 +22,7 @@ Edita `.env` con tus credenciales de MySQL. La app crea la base de datos y las t
 ## Ejecutar
 
 ```bash
-uvicorn app:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 API base: `http://localhost:8000`

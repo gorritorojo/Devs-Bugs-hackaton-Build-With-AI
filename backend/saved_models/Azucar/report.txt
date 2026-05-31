@@ -1,0 +1,40 @@
+============================================================
+  MODELO DE PREDICCIÓN DE DEMANDA — AZUCAR
+============================================================
+  Entrenado: 2026-05-31 04:11
+  Algoritmo: Ridge Regression
+  Historial: 50 meses
+
+  MÉTRICAS DE EVALUACIÓN
+  ─────────────────────────────────────
+  Train R²:  0.9795
+  Test  R²:  0.9606
+  Test  MAE: 6,277 kg
+  Test  MAPE:4.2%
+  CV R²:     0.9023 ± 0.0895
+
+  FEATURES MÁS INFLUYENTES
+  ─────────────────────────────────────
+  demanda_total_kg                    +35131.83
+  mes_cos                             +12336.01
+  factor_estacional                   -10161.85
+  n_lotes_activos                     +9660.91
+  demanda_promedio_por_lote_kg        +9587.25
+  trimestre                           -7578.91
+
+  CÓMO USAR EL MODELO
+  ─────────────────────────────────────
+  import joblib, numpy as np
+  pipeline = joblib.load('saved_model/model.joblib')
+  X_nuevo  = np.array([[mes_del_año, semestre, trimestre,
+             mes_idx, precio, n_lotes, tasa, estacional,
+             demanda_actual, demanda_prom, mes_sin, mes_cos]])
+  prediccion_kg = pipeline.predict(X_nuevo)[0]
+
+  INTERPRETACIÓN PARA AGROS
+  ─────────────────────────────────────
+  Si prediccion_kg > demanda_actual * 1.10 → mercado en alza
+  → Recomendación: ampliar volumen de lotes el próximo mes
+  Si prediccion_kg < demanda_actual * 0.90 → mercado a la baja
+  → Recomendación: mantener o reducir lotes; diversificar producto
+============================================================

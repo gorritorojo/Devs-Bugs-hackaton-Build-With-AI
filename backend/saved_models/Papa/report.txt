@@ -1,0 +1,40 @@
+============================================================
+  MODELO DE PREDICCIÓN DE DEMANDA — PAPA
+============================================================
+  Entrenado: 2026-05-31 04:11
+  Algoritmo: Ridge Regression
+  Historial: 50 meses
+
+  MÉTRICAS DE EVALUACIÓN
+  ─────────────────────────────────────
+  Train R²:  0.9501
+  Test  R²:  0.9278
+  Test  MAE: 4,033 kg
+  Test  MAPE:5.5%
+  CV R²:     0.8643 ± 0.0812
+
+  FEATURES MÁS INFLUYENTES
+  ─────────────────────────────────────
+  demanda_total_kg                    +10058.33
+  n_lotes_activos                     +7350.76
+  mes_cos                             +6862.20
+  demanda_promedio_por_lote_kg        +4067.89
+  factor_estacional                   -3271.52
+  trimestre                           -3159.93
+
+  CÓMO USAR EL MODELO
+  ─────────────────────────────────────
+  import joblib, numpy as np
+  pipeline = joblib.load('saved_model/model.joblib')
+  X_nuevo  = np.array([[mes_del_año, semestre, trimestre,
+             mes_idx, precio, n_lotes, tasa, estacional,
+             demanda_actual, demanda_prom, mes_sin, mes_cos]])
+  prediccion_kg = pipeline.predict(X_nuevo)[0]
+
+  INTERPRETACIÓN PARA AGROS
+  ─────────────────────────────────────
+  Si prediccion_kg > demanda_actual * 1.10 → mercado en alza
+  → Recomendación: ampliar volumen de lotes el próximo mes
+  Si prediccion_kg < demanda_actual * 0.90 → mercado a la baja
+  → Recomendación: mantener o reducir lotes; diversificar producto
+============================================================
