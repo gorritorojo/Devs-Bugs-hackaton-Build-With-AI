@@ -1,0 +1,66 @@
+id,role,contact_name,email,company_name,phone,area,products,business_size
+bef9c771-aa51-4703-8a91-f5deacb357b9,pyme,Régulo de Alberto,murosimon@example.org,Minimarket Altiplano 87,+591 3 314 1409,Obispo Santistevan,,mediana
+97d7262a-c8b7-42ea-888d-a21df21b8f2d,pyme,Emperatriz Lucas Checa,seve56@example.org,La Colmena Ltda. 39,+591 3 328 3286,Obispo Santistevan,,pequeña
+ec0d2c93-0e5b-4c50-ba75-f004dcec5834,pyme,Eugenia Ferrer Sevilla,xferrando@example.net,Minimarket Altiplano 39,+591 3 394 9935,Ángel Sandoval,,mediana
+ebd1c780-fbb2-4b29-b584-c8ab61d7dde5,pyme,Clementina Noriega Bou,calnilo@example.org,Mercado Campesino 71,+591 3 303 2535,Cordillera,,pequeña
+2108696a-4cc7-40d8-9569-044743ce1fee,pyme,Borja López-Palau,ovazquez@example.com,AlimAndes S.R.L. 57,+591 3 377 1434,José Miguel de Velasco,,pequeña
+d855aabf-f990-45c2-9618-4a22001dbfd7,pyme,Natalia Rojas Anglada,htorre@example.org,Almacén Don Pepe 65,+591 3 383 9928,Guarayos,,pequeña
+e309b4be-0ff9-4c6e-9b21-8765e6758810,pyme,Isidoro Jerez-Segura,iantunez@example.net,Tiendas Campestre 92,+591 3 375 5557,Sara,,pequeña
+18891a77-1cc2-4640-bb7c-857cb9d32608,pyme,Luna Priego Oliver,bernaltiburcio@example.org,Distribuidora Yungas 71,+591 3 320 7924,Germán Busch,,mediana
+969caafc-3345-4dc9-a969-119d4b9f88b4,pyme,Sarita Bayón,jenny42@example.net,Abastos del Sur 51,+591 3 327 6514,Ángel Sandoval,,pequeña
+34fd900e-e4c0-4754-9151-a15376db9483,pyme,Ignacia Colom Tudela,cabrerapancho@example.net,Super Mercado Oriental 23,+591 3 312 6881,Vallegrande,,mediana
+24f79fd0-1cbb-49b0-8983-73d91de9b03f,pyme,Purificación Zurita Avilés,rosenda61@example.com,Bodega El Sol 51,+591 3 333 1711,Obispo Santistevan,,mediana
+172c3dd9-99fe-434b-a444-5322404ada27,pyme,Anastasia Etelvina Bertrán Almansa,vilanovanatalia@example.org,AlimAndes S.R.L. 57,+591 3 315 7201,Ángel Sandoval,,mediana
+4f1f1e96-59ee-47d7-822c-84b2509ff697,pyme,Florentino de Iglesias,luquejulian@example.com,Comercial Santa Cruz 28,+591 3 380 6925,Manuel María Caballero,,pequeña
+4668c77a-7fa9-4461-af7e-cff70ef2f7e0,pyme,Graciano Saez Paniagua,pavonadelia@example.net,Almacén Don Pepe 31,+591 3 308 1750,Ñuflo de Chávez,,pequeña
+bd70f223-fd82-4b89-8ae5-2e199b50d393,pyme,Nilda Borrell Barón,amando77@example.net,Distribuidora Yungas 64,+591 3 337 2307,Vallegrande,,pequeña
+aec26458-307a-436e-b1fe-faa6ff50f5c2,pyme,Mateo Aramburu Carreras,xpalau@example.net,Comercial Santa Cruz 60,+591 3 312 7227,Florida,,mediana
+62abbb4f-8069-4daa-b61a-d3f16bcc0858,pyme,Quique Arjona,madridlucila@example.com,Minimarket Altiplano 52,+591 3 346 3664,Germán Busch,,mediana
+6be3776f-6a76-4b2f-a16a-a0486d1d81e3,pyme,Gerardo Aguirre-González,marita94@example.org,La Colmena Ltda. 06,+591 3 385 5374,Obispo Santistevan,,pequeña
+3014e70e-be42-4a0e-abbb-be16034cfc42,pyme,Amanda Martinez,jpablo@example.com,Bodega El Sol 61,+591 3 381 3803,José Miguel de Velasco,,pequeña
+d48825e2-e322-422d-a0b3-ecd0381da0f5,pyme,Juan Francisco Alegria,mllanos@example.com,Abastos del Sur 22,+591 3 359 7216,Florida,,pequeña
+057e4885-81c9-4f44-ab58-3ba4c83335ce,pyme,Caridad Pareja,marcelino77@example.com,Minimarket Altiplano 95,+591 3 341 1916,Cordillera,,pequeña
+d524c10d-956e-4860-8723-a21116f74aa8,pyme,Gala Candelas Uría Franch,agudomaria-fernanda@example.org,Distribuidora Yungas 51,+591 3 340 7572,Florida,,pequeña
+05e77edd-7523-4527-9dd9-c60abc42c4f1,pyme,Sancho del Piñeiro,waguila@example.com,La Colmena Ltda. 87,+591 3 372 6155,Cordillera,,mediana
+9fc5091c-188c-4c3e-bab3-b62d977b2de3,pyme,Régulo Castro Abril,brunilda54@example.org,Super Mercado Oriental 00,+591 3 382 8517,Chiquitos,,mediana
+24d65de7-3bfd-425b-9017-c2a8c46d0269,pyme,Dani de Valls,gutierrezrosendo@example.org,Abastos del Sur 88,+591 3 331 9830,Florida,,mediana
+df7aa303-a9e8-4700-8b65-8bbf43d651bb,pyme,Soledad Cisneros Vilaplana,fuentesnazaret@example.org,Abastos Chapare 58,+591 3 374 7543,Germán Busch,,pequeña
+355b3ac8-b33b-47d8-854d-ea826873f86d,pyme,Leticia Andreu,tomasa95@example.org,Abastos del Sur 81,+591 3 365 9085,Ángel Sandoval,,pequeña
+c617bbd8-d316-4339-9104-f15b2c3611c5,pyme,Delia Olmo Belda,sebastianlobo@example.org,Comercial Santa Cruz 93,+591 3 314 3504,Ñuflo de Chávez,,pequeña
+a54a0213-28da-472a-9a83-d336c3b1353b,pyme,Quique Asensio,eperales@example.org,Distribuidora Yungas 82,+591 3 387 7916,Manuel María Caballero,,pequeña
+f5d7e76b-9691-4ba0-a722-c36b2861aeb6,pyme,Luz Ballesteros Carrión,cjaume@example.org,Super Mercado Oriental 72,+591 3 348 8668,José Miguel de Velasco,,mediana
+6aef32f1-39b1-447a-a4ff-4fd462868843,pyme,Amado de Hernández,eloymacias@example.org,AlimAndes S.R.L. 82,+591 3 301 2876,Ñuflo de Chávez,,mediana
+b7bc82f3-ec2f-4a9d-a4ef-48354fc41fa0,pyme,Isabel Acero Pascual,javierpombo@example.org,Distribuidora Yungas 03,+591 3 382 6573,Ángel Sandoval,,mediana
+2f849e5b-33aa-4da1-b23e-21cc2c319e17,pyme,Maribel Esteve Cabello,dcoello@example.net,Super Mercado Oriental 12,+591 3 320 8433,Andrés Ibáñez,,mediana
+5cec27f7-f118-481f-8092-fe1c24f5962b,pyme,Vilma Lastra Vera,santanaclara@example.com,AlimAndes S.R.L. 90,+591 3 397 3927,José Miguel de Velasco,,pequeña
+32aae2d1-41e5-44d7-8c54-40fb3e758b42,pyme,Evita Prats Piñol,plazamarcio@example.org,Comercial Santa Cruz 61,+591 3 380 5889,Vallegrande,,pequeña
+e004c024-5442-4147-a92c-a58cb7cdc876,pyme,Aureliano del Ruiz,mtapia@example.net,Abastos del Sur 73,+591 3 347 3646,José Miguel de Velasco,,pequeña
+d12ef3af-fe57-4a40-826c-8fa34b9e8a28,pyme,Sandalio Luis Barranco Chaves,igual@example.org,Bodega El Sol 87,+591 3 341 9005,Andrés Ibáñez,,pequeña
+35cef7e9-ed7d-4add-80ab-73ca4de30d31,pyme,Olegario de Sanjuan,olga78@example.com,Abastos Chapare 58,+591 3 346 6038,Cordillera,,pequeña
+eea86329-dba4-4ede-b0b1-bb47306e0077,pyme,Reinaldo Quirino Poza Pacheco,lzurita@example.org,La Colmena Ltda. 58,+591 3 372 2290,Ángel Sandoval,,mediana
+ea4959f5-89e3-4e39-aae7-b5038901937a,pyme,Ismael Lago Reina,gilcorrea@example.com,Comercial Santa Cruz 75,+591 3 308 9727,Sara,,pequeña
+0762e274-b005-472c-953b-efa8fefbe7ae,agro,Emilia Ricarda Huguet Gallardo,vdaza@example.org,Productores del Beni 47,+591 3 370 3705,Florida,Trigo,grande
+822f07a9-e410-45f7-9731-387fef39cc4a,agro,Pío Vicens-Valencia,anselmosancho@example.org,Productores del Chaco 22,+591 3 339 7537,Ñuflo de Chávez,"Soya, Maiz, Azucar",grande
+ac172182-c0b9-4c38-b9fc-d7da5a69c2a0,agro,Cebrián Tirado Arjona,duranpaco@example.com,Productores del Beni 88,+591 3 315 5061,Cordillera,"Soya, Azucar",pequeña
+e93f25fc-9b20-4187-95fa-859beca1159e,agro,Héctor Botella Enríquez,epalmer@example.com,Agro Valle Ltda. 05,+591 3 329 4608,Andrés Ibáñez,"Papa, Azucar",pequeña
+2d0d9e58-1728-4883-830b-e6313ff462d3,agro,Graciana Alemán Agustí,aguilerajuana@example.com,Cooperativa Andina 59,+591 3 304 6413,Ángel Sandoval,"Trigo, Papa, Maiz",grande
+4ed21bf4-a3b5-4f5d-be5a-57bc7c6971ab,agro,Victorino Rincón Sobrino,pvives@example.org,Agro Santa Cruz 85,+591 3 362 4510,José Miguel de Velasco,Arroz,pequeña
+ce7054cf-8c59-4151-8af4-32616beee2ce,agro,Heraclio Evaristo Pujol Leal,jose10@example.com,Productores del Altiplano 25,+591 3 360 7669,Cordillera,"Azucar, Trigo, Soya",pequeña
+e2a93d75-5d24-4f15-9196-e3316fbc36d5,agro,Cristina Quintanilla Acuña,paniaguapaula@example.org,Agro Chapare S.R.L. 34,+591 3 345 7939,Guarayos,Trigo,mediana
+5230c44f-1ffb-4722-b4b2-8f7aa7e4d21b,agro,Victor Manuel Pascual Ballesteros,jeronimo73@example.org,Agro Chapare S.R.L. 28,+591 3 393 6559,Sara,"Papa, Trigo, Azucar",pequeña
+b44f4d24-1f22-4a78-aee0-7d4b475644b6,agro,Íñigo del Villegas,almavaldes@example.net,Productores del Altiplano 98,+591 3 368 8350,Chiquitos,Maiz,mediana
+12e43293-913a-4078-998d-6aa7970086a5,agro,Adela Priego Cal,luisinanadal@example.org,Productores del Beni 43,+591 3 331 2235,Ichilo,Arroz,grande
+b48ddd41-5e75-4522-9cd3-eb76e6a1bde8,agro,Catalina Ainoa Lloret Santana,severino59@example.org,Agro Santa Cruz 08,+591 3 369 1241,Ángel Sandoval,Papa,pequeña
+9f830150-18b9-4945-bfca-7dba34147d1d,agro,Nacio Otero-Checa,fespejo@example.net,Productores del Beni 09,+591 3 361 4502,Vallegrande,Soya,mediana
+75d29d49-e2f9-4dc9-afb3-52732090ca1c,agro,Jerónimo Amor Ojeda,mmanso@example.org,Agro Chapare S.R.L. 76,+591 3 300 7396,Florida,Maiz,mediana
+1fadc760-de45-4920-ba55-c18df2de195e,agro,Socorro Vall Mercader,carreteroaristides@example.net,Agro Santa Cruz 02,+591 3 391 8973,Chiquitos,"Soya, Azucar",pequeña
+a76f778e-38df-4170-b898-b5d475bc7437,agro,Teodosio Villalba-Cuadrado,octavia83@example.com,Cooperativa Agropecuaria Boliviana 21,+591 3 394 9883,Andrés Ibáñez,"Maiz, Papa",grande
+d92a3c54-572c-4498-8bd2-9e332d59536b,agro,Clemente Puga Ferrándiz,casanovagenoveva@example.org,Cooperativa Agropecuaria Boliviana 39,+591 3 361 9238,Warnes,"Papa, Trigo",grande
+51f1c886-7ad3-4150-aa57-94e34edf0078,agro,Tiburcio Gallart Rosado,padillaoscar@example.net,Agro Valle Ltda. 73,+591 3 310 4044,Ángel Sandoval,Papa,grande
+ccef7116-f1aa-4bcf-8b41-fe254592ed7a,agro,Narciso Bernad Buendía,kpino@example.org,Agro Tarija 22,+591 3 330 7615,Ángel Sandoval,Trigo,grande
+db5658e5-65b8-41d0-96ce-1876bc9e5e9d,agro,Alejo Cobo Tolosa,ecampos@example.org,Cooperativa Agropecuaria Boliviana 17,+591 3 305 2343,Guarayos,Azucar,grande
+664ca3d9-b4cc-4644-b4bc-d65ed5ce51e1,agro,Carlota Rivera Piñeiro,jonatan34@example.org,Agro Chiquitano 00,+591 3 326 6147,Cordillera,"Azucar, Trigo, Arroz",mediana
+fae405e9-5b4e-43a9-83f7-260aa7c265e6,agro,Ricardo Serra Borrás,uurena@example.net,Productores del Beni 44,+591 3 340 2188,Andrés Ibáñez,"Maiz, Arroz",mediana
+c42d60f7-72a5-4218-8455-6843a1d63934,agro,Candelas Tomasa Lamas Molins,carmela54@example.com,Agro Valle Ltda. 31,+591 3 327 9288,Florida,"Azucar, Papa, Trigo",pequeña
+5676ed82-9a65-4833-9526-d82e8115357c,agro,Gastón Arévalo,consueloduran@example.com,Yungas Fresh 90,+591 3 336 3584,Ichilo,"Papa, Maiz",grande
+91b887de-f920-4f25-aa0b-5e71502435fc,agro,Bernabé Montalbán Taboada,hierroani@example.com,Agro Santa Cruz 32,+591 3 370 5905,Warnes,"Arroz, Azucar, Papa",grande

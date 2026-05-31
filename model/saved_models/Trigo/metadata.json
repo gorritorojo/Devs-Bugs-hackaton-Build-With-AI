@@ -1,0 +1,58 @@
+{
+  "producto": "Trigo",
+  "entrenado_en": "2026-05-31T04:11:37.076304",
+  "algoritmo": "Ridge Regression (alpha=1.0)",
+  "features": [
+    "mes_del_año",
+    "semestre",
+    "trimestre",
+    "mes_idx",
+    "precio_promedio_bs_kg",
+    "n_lotes_activos",
+    "tasa_completado",
+    "factor_estacional",
+    "demanda_total_kg",
+    "demanda_promedio_por_lote_kg",
+    "mes_sin",
+    "mes_cos"
+  ],
+  "target": "demanda_siguiente_mes_kg",
+  "n_meses_historial": 50,
+  "split_train_test": "80/20 cronológico",
+  "metricas_train": {
+    "r2": 0.972,
+    "mae": 4969.23,
+    "rmse": 6312.91,
+    "mape": 5.1
+  },
+  "metricas_test": {
+    "r2": 0.9028,
+    "mae": 13084.97,
+    "rmse": 16236.78,
+    "mape": 8.73
+  },
+  "cross_val_r2_mean": 0.9333,
+  "cross_val_r2_std": 0.0214,
+  "intercept": 106318.8465,
+  "coeficientes": {
+    "mes_del_año": 1110.4456,
+    "semestre": 11991.4846,
+    "trimestre": -7923.2662,
+    "mes_idx": 5482.2887,
+    "precio_promedio_bs_kg": -1944.4238,
+    "n_lotes_activos": 7846.5517,
+    "tasa_completado": 2837.5591,
+    "factor_estacional": -8025.2185,
+    "demanda_total_kg": 23533.5311,
+    "demanda_promedio_por_lote_kg": 6747.3177,
+    "mes_sin": 894.0693,
+    "mes_cos": 999.9066
+  },
+  "rango_datos": {
+    "demanda_min_kg": 43304.26,
+    "demanda_max_kg": 241777.92,
+    "demanda_media_kg": 112761.09,
+    "precio_min_bs_kg": 2.74,
+    "precio_max_bs_kg": 4.2
+  }
+}

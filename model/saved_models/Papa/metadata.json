@@ -1,0 +1,58 @@
+{
+  "producto": "Papa",
+  "entrenado_en": "2026-05-31T04:11:15.314672",
+  "algoritmo": "Ridge Regression (alpha=1.0)",
+  "features": [
+    "mes_del_año",
+    "semestre",
+    "trimestre",
+    "mes_idx",
+    "precio_promedio_bs_kg",
+    "n_lotes_activos",
+    "tasa_completado",
+    "factor_estacional",
+    "demanda_total_kg",
+    "demanda_promedio_por_lote_kg",
+    "mes_sin",
+    "mes_cos"
+  ],
+  "target": "demanda_siguiente_mes_kg",
+  "n_meses_historial": 50,
+  "split_train_test": "80/20 cronológico",
+  "metricas_train": {
+    "r2": 0.9501,
+    "mae": 3076.29,
+    "rmse": 3879.8,
+    "mape": 4.59
+  },
+  "metricas_test": {
+    "r2": 0.9278,
+    "mae": 4033.17,
+    "rmse": 5365.38,
+    "mape": 5.5
+  },
+  "cross_val_r2_mean": 0.8643,
+  "cross_val_r2_std": 0.0812,
+  "intercept": 65853.0013,
+  "coeficientes": {
+    "mes_del_año": 1089.9446,
+    "semestre": 2112.0628,
+    "trimestre": -3159.9294,
+    "mes_idx": 2572.6746,
+    "precio_promedio_bs_kg": -2252.0246,
+    "n_lotes_activos": 7350.7582,
+    "tasa_completado": -850.4806,
+    "factor_estacional": -3271.5212,
+    "demanda_total_kg": 10058.3277,
+    "demanda_promedio_por_lote_kg": 4067.893,
+    "mes_sin": -1653.574,
+    "mes_cos": 6862.1986
+  },
+  "rango_datos": {
+    "demanda_min_kg": 29441.54,
+    "demanda_max_kg": 105611.36,
+    "demanda_media_kg": 66575.43,
+    "precio_min_bs_kg": 2.25,
+    "precio_max_bs_kg": 4.38
+  }
+}
