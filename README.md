@@ -1,6 +1,14 @@
-# CrowdBuy
+# Pariente
 
-Plataforma que conecta productores agricolas con PYMEs mediante un modelo de compra colectiva (crowd-buying). Los productores publican lotes de productos ecologicos a precios base, y las PYMEs se comprometen a comprar kilos hasta alcanzar la meta del lote, activando asi una cadena de suministro mas justa y sostenible.
+## integrantes:
+
+Renzo Valencia Gutierrez
+Andres Velasquez Villaroel
+Brayan Luna Monrroy
+
+## link video YouTube
+
+https://youtu.be/ffb5YKDpMJc
 
 ## Arquitectura
 

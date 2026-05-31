@@ -1,4 +1,11 @@
-# DevsBugsHackatonBuildWithAI
+# Pariente
+
+## integrantes:
+
+Renzo Valencia Gutierrez
+Andres Velasquez Villaroel
+Brayan Luna Monrroy
+
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.15.
 
