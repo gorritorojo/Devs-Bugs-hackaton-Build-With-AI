@@ -1,35 +1,45 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {
     ChangeDetectionStrategy,
     Component,
-    computed,
     inject,
+    type OnInit,
+    signal,
 } from '@angular/core';
-import { MarketService } from '../../core/services/market.service';
+import { firstValueFrom } from 'rxjs';
+import { API_BASE_URL } from '../../core/api.config';
+import type { ImpactData } from '../../core/models';
+import { RoleService } from '../../core/services/role.service';
 
 @Component({
     selector: 'app-impact-dashboard',
     templateUrl: './impact-dashboard.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImpactDashboardComponent {
-    private readonly marketService = inject(MarketService);
+export class ImpactDashboardComponent implements OnInit {
+    private readonly http = inject(HttpClient);
+    private readonly apiUrl = inject(API_BASE_URL);
+    private readonly roleService = inject(RoleService);
 
-    totalKilos = computed(() =>
-        this.marketService.lots().reduce((sum, l) => sum + l.currentKilos, 0)
-    );
+    loading = signal(false);
+    data = signal<ImpactData | null>(null);
 
-    activeLotes = computed(() => this.marketService.lots().length);
-
-    totalProgress = computed(() => {
-        const lots = this.marketService.lots();
-        const totalKilos = lots.reduce((sum, l) => sum + l.currentKilos, 0);
-        const totalTarget = lots.reduce((sum, l) => sum + l.targetKilos, 0);
-        return totalTarget > 0
-            ? Math.round((totalKilos / totalTarget) * 100)
-            : 0;
-    });
-
-    uniqueProducers = computed(() => [
-        ...new Set(this.marketService.lots().map((l) => l.producer)),
-    ]);
+    async ngOnInit(): Promise<void> {
+        this.loading.set(true);
+        try {
+            let params = new HttpParams();
+            const userId = this.roleService.userId();
+            if (userId) {
+                params = params.set('userId', userId);
+            }
+            const res = await firstValueFrom(
+                this.http.get<ImpactData>(`${this.apiUrl}/pyme/impact`, {
+                    params,
+                })
+            );
+            this.data.set(res);
+        } finally {
+            this.loading.set(false);
+        }
+    }
 }

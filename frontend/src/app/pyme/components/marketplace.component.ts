@@ -3,6 +3,8 @@ import {
     Component,
     computed,
     inject,
+    type OnInit,
+    signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -34,7 +36,7 @@ import { timeRemaining } from '../../core/time-remaining';
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MarketplaceComponent {
+export class MarketplaceComponent implements OnInit {
     marketService = inject(MarketService);
     private readonly messageService = inject(MessageService);
     private readonly router = inject(Router);
@@ -45,6 +47,11 @@ export class MarketplaceComponent {
     commitDialogVisible = false;
     selectedLot: Lot | null = null;
     commitKilos = 0;
+    committing = signal(false);
+
+    ngOnInit(): void {
+        this.marketService.loadLots();
+    }
 
     progress(lot: Lot): number {
         return Math.round((lot.currentKilos / lot.targetKilos) * 100);
@@ -76,19 +83,35 @@ export class MarketplaceComponent {
         this.commitDialogVisible = true;
     }
 
-    confirmCommit() {
+    async confirmCommit() {
         if (!this.selectedLot || this.commitKilos <= 0) {
             return;
         }
-        this.marketService.addCommitment(this.selectedLot.id, this.commitKilos);
-        this.messageService.add({
-            severity: 'success',
-            summary: 'Compromiso confirmado',
-            detail: `Has comprometido ${this.commitKilos} kg de ${this.selectedLot.product}. ¡Gracias por participar!`,
-            life: 4000,
-        });
-        this.commitDialogVisible = false;
-        this.selectedLot = null;
-        this.commitKilos = 0;
+        this.committing.set(true);
+        try {
+            await this.marketService.commitToLot(
+                this.selectedLot.id,
+                this.commitKilos,
+                this.roleService.userId()
+            );
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Compromiso confirmado',
+                detail: `Has comprometido ${this.commitKilos} kg de ${this.selectedLot.product}. ¡Gracias por participar!`,
+                life: 4000,
+            });
+            this.commitDialogVisible = false;
+            this.selectedLot = null;
+            this.commitKilos = 0;
+        } catch {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudo confirmar el compromiso.',
+                life: 5000,
+            });
+        } finally {
+            this.committing.set(false);
+        }
     }
 }

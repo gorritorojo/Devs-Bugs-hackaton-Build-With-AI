@@ -131,7 +131,8 @@
               label="Comprometerse"
               icon="pi pi-check"
               class="w-full !bg-[var(--primary)] !border-[var(--primary)]"
-              [disabled]="!commitKilos || commitKilos <= 0"
+              [disabled]="!commitKilos || commitKilos <= 0 || committing()"
+              [loading]="committing()"
               (click)="confirmCommit()"
             ></button>
           </div>

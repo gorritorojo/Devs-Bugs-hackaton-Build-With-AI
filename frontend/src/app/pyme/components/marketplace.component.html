@@ -5,7 +5,11 @@
       Únete a una compra comunitaria y alcanza la meta
     </p>
   </header>
-  @if (marketService.lots().length === 0) {
+  @if (marketService.loading()) {
+  <div class="flex justify-center py-16">
+    <i class="pi pi-spin pi-spinner text-4xl text-[var(--primary)]"></i>
+  </div>
+  } @else if (marketService.lots().length === 0) {
   <div class="text-center py-16">
     <i class="pi pi-inbox text-5xl text-gray-300 mb-4 block"></i>
     <p class="text-gray-500">No hay lotes activos en este momento</p>
@@ -157,7 +161,8 @@
         pRipple
         label="Confirmar compromiso"
         icon="pi pi-check"
-        [disabled]="!commitKilos || commitKilos <= 0"
+        [disabled]="!commitKilos || commitKilos <= 0 || committing()"
+        [loading]="committing()"
         class="!bg-[var(--primary)] !border-[var(--primary)]"
         (click)="confirmCommit()"
       ></button>

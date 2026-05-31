@@ -5,7 +5,11 @@
       El resultado de nuestras compras colaborativas
     </p>
   </header>
-
+  @if (loading()) {
+  <div class="flex justify-center py-16">
+    <i class="pi pi-spin pi-spinner text-4xl text-[var(--primary)]"></i>
+  </div>
+  } @else if (data(); as d) {
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
     <div
       class="bg-white p-6 rounded-2xl shadow-md text-center hover:shadow-lg transition-shadow"
@@ -16,7 +20,7 @@
       >
         <i class="pi pi-box text-2xl text-[var(--primary)]"></i>
       </div>
-      <p class="text-3xl font-bold text-[var(--primary)]">{{ totalKilos() }}</p>
+      <p class="text-3xl font-bold text-[var(--primary)]">{{ d.totalKilos }}</p>
       <p class="text-sm text-gray-500 mt-1">kg comprometidos</p>
     </div>
     <div
@@ -29,7 +33,7 @@
         <i class="pi pi-tags text-2xl text-[var(--secondary)]"></i>
       </div>
       <p class="text-3xl font-bold text-[var(--secondary)]">
-        {{ activeLotes() }}
+        {{ d.activeLotes }}
       </p>
       <p class="text-sm text-gray-500 mt-1">lotes activos</p>
     </div>
@@ -43,7 +47,7 @@
         <i class="pi pi-check-circle text-2xl text-[var(--primary)]"></i>
       </div>
       <p class="text-3xl font-bold text-[var(--primary)]">
-        {{ totalProgress() }}%
+        {{ d.totalProgress }}%
       </p>
       <p class="text-sm text-gray-500 mt-1">progreso general</p>
     </div>
@@ -55,7 +59,7 @@
         Productores participantes
       </h3>
       <div class="space-y-3">
-        @for (producer of uniqueProducers(); track producer) {
+        @for (producer of d.uniqueProducers; track producer) {
         <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
           <i class="pi pi-user text-lg text-[var(--primary)]"></i>
           <span class="text-sm text-gray-700">{{ producer }}</span>
@@ -90,4 +94,5 @@
       </div>
     </div>
   </div>
+  }
 </div>

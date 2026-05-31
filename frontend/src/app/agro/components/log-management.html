@@ -35,7 +35,11 @@
       ></button>
     </div>
     <div class="p-6">
-      @if (marketService.lots().length === 0) {
+      @if (marketService.loading()) {
+      <div class="flex justify-center py-12">
+        <i class="pi pi-spin pi-spinner text-4xl text-[var(--primary)]"></i>
+      </div>
+      } @else if (marketService.lots().length === 0) {
       <div class="text-center py-12">
         <i class="pi pi-inbox text-3xl text-gray-300 mb-2 block"></i>
         <p class="text-gray-400">No hay lotes registrados</p>
@@ -242,7 +246,8 @@
         pRipple
         label="Crear lote"
         icon="pi pi-check"
-        [disabled]="!isNewLotValid()"
+        [disabled]="!isNewLotValid() || creating()"
+        [loading]="creating()"
         class="!bg-[var(--primary)] !border-[var(--primary)]"
         (click)="createLot()"
       ></button>

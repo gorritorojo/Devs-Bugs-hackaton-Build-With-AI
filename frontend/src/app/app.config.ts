@@ -1,3 +1,4 @@
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import {
     type ApplicationConfig,
     provideZonelessChangeDetection,
@@ -42,6 +43,7 @@ export const appConfig: ApplicationConfig = {
         provideZonelessChangeDetection(),
         provideRouter(routes),
         provideAnimations(),
+        provideHttpClient(withFetch()),
         MessageService,
         providePrimeNG({
             theme: {

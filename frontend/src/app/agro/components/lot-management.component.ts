@@ -1,9 +1,10 @@
-import { DatePipe } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
     computed,
     inject,
+    type OnInit,
+    signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -40,11 +41,10 @@ import { timeRemaining } from '../../core/time-remaining';
         InputTextModule,
         InputNumberModule,
         DatePickerModule,
-        DatePipe,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LotManagementComponent {
+export class LotManagementComponent implements OnInit {
     marketService = inject(MarketService);
     private readonly messageService = inject(MessageService);
     private readonly router = inject(Router);
@@ -55,6 +55,7 @@ export class LotManagementComponent {
     today = new Date();
 
     newLotDialogVisible = false;
+    creating = signal(false);
     newLot = {
         product: '',
         producer: '',
@@ -62,6 +63,11 @@ export class LotManagementComponent {
         basePrice: 0,
         deadline: null as Date | null,
     };
+
+    ngOnInit(): void {
+        const userId = this.roleService.userId();
+        this.marketService.loadLots(false, userId ?? undefined);
+    }
 
     progress(lot: Lot): number {
         return Math.round((lot.currentKilos / lot.targetKilos) * 100);
@@ -75,8 +81,10 @@ export class LotManagementComponent {
         return timeRemaining(lot.deadline);
     }
 
-    goToPredict(_lotId: string) {
-        this.router.navigate(['/agro/predict']);
+    goToPredict(lotId: string) {
+        this.router.navigate(['/agro/predict'], {
+            queryParams: { lotId },
+        });
     }
 
     goToDetail(lotId: string) {
@@ -107,23 +115,36 @@ export class LotManagementComponent {
         );
     }
 
-    createLot() {
+    async createLot() {
         if (!this.isNewLotValid()) {
             return;
         }
-        this.marketService.createLot({
-            product: this.newLot.product.trim(),
-            producer: this.newLot.producer.trim(),
-            targetKilos: this.newLot.targetKilos,
-            basePrice: this.newLot.basePrice,
-            deadline: (this.newLot.deadline as Date).toISOString(),
-        });
-        this.messageService.add({
-            severity: 'success',
-            summary: 'Lote creado',
-            detail: `El lote "${this.newLot.product}" ha sido creado exitosamente.`,
-            life: 4000,
-        });
-        this.newLotDialogVisible = false;
+        this.creating.set(true);
+        try {
+            await this.marketService.createLot({
+                product: this.newLot.product.trim(),
+                producer: this.newLot.producer.trim(),
+                targetKilos: this.newLot.targetKilos,
+                basePrice: this.newLot.basePrice,
+                deadline: (this.newLot.deadline as Date).toISOString(),
+                createdBy: this.roleService.userId(),
+            });
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Lote creado',
+                detail: `El lote "${this.newLot.product}" ha sido creado exitosamente.`,
+                life: 4000,
+            });
+            this.newLotDialogVisible = false;
+        } catch {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudo crear el lote.',
+                life: 5000,
+            });
+        } finally {
+            this.creating.set(false);
+        }
     }
 }

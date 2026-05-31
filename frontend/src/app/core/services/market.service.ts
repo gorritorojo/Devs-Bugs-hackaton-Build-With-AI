@@ -1,80 +1,93 @@
-import { Injectable, signal } from '@angular/core';
-import type { Lot } from '../models';
-
-const now = new Date();
-const addDays = (d: Date, n: number) => {
-    const r = new Date(d);
-    r.setDate(r.getDate() + n);
-    return r.toISOString();
-};
-
-const INITIAL_LOTS: Lot[] = [
-    {
-        id: 'LOT-001',
-        product: 'Arroz Orgánico',
-        targetKilos: 1000,
-        currentKilos: 720,
-        basePrice: 2.5,
-        producer: 'Cooperativa La Esperanza',
-        deadline: addDays(now, 14),
-    },
-    {
-        id: 'LOT-002',
-        product: 'Frijol Negro',
-        targetKilos: 500,
-        currentKilos: 380,
-        basePrice: 3.2,
-        producer: 'Asociación El Progreso',
-        deadline: addDays(now, 5),
-    },
-    {
-        id: 'LOT-003',
-        product: 'Miel de Abeja',
-        targetKilos: 300,
-        currentKilos: 90,
-        basePrice: 8.0,
-        producer: 'Apiarios del Valle',
-        deadline: addDays(now, -3),
-    },
-];
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { API_BASE_URL } from '../api.config';
+import type { CommitmentResponse, Lot } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class MarketService {
-    readonly lots = signal<Lot[]>(INITIAL_LOTS);
+    private readonly http = inject(HttpClient);
+    private readonly apiUrl = inject(API_BASE_URL);
 
-    addCommitment(lotId: string, kilos: number): void {
-        this.lots.update((lots) =>
-            lots.map((lot) =>
-                lot.id === lotId
-                    ? {
-                          ...lot,
-                          currentKilos: Math.min(
-                              lot.currentKilos + kilos,
-                              lot.targetKilos
-                          ),
-                      }
-                    : lot
-            )
-        );
+    readonly lots = signal<Lot[]>([]);
+    readonly loading = signal(false);
+
+    async loadLots(all = false, createdBy?: string): Promise<void> {
+        this.loading.set(true);
+        try {
+            const params: Record<string, string> = {};
+            if (all) {
+                params['all'] = 'true';
+            }
+            if (createdBy) {
+                params['created_by'] = createdBy;
+            }
+            const options = Object.keys(params).length > 0 ? { params } : {};
+            const data = await firstValueFrom(
+                this.http.get<Lot[]>(`${this.apiUrl}/lots`, options)
+            );
+            this.lots.set(data);
+        } finally {
+            this.loading.set(false);
+        }
     }
 
-    createLot(data: {
+    async loadLot(id: string): Promise<Lot | null> {
+        try {
+            const lot = await firstValueFrom(
+                this.http.get<Lot>(`${this.apiUrl}/lots/${id}`)
+            );
+            this.lots.update((lots) => {
+                const idx = lots.findIndex((l) => l.id === id);
+                if (idx >= 0) {
+                    const copy = [...lots];
+                    copy[idx] = lot;
+                    return copy;
+                }
+                return [...lots, lot];
+            });
+            return lot;
+        } catch {
+            return null;
+        }
+    }
+
+    async commitToLot(
+        lotId: string,
+        kilos: number,
+        userId: string | null
+    ): Promise<CommitmentResponse> {
+        const res = await firstValueFrom(
+            this.http.post<CommitmentResponse>(
+                `${this.apiUrl}/lots/${lotId}/commit`,
+                { kilos, userId }
+            )
+        );
+        this.lots.update((lots) =>
+            lots.map((l) => (l.id === lotId ? res.lot : l))
+        );
+        return res;
+    }
+
+    async createLot(data: {
         product: string;
+        producer: string;
         targetKilos: number;
         basePrice: number;
-        producer: string;
         deadline: string;
-    }): void {
-        const current = this.lots();
-        const newLot: Lot = {
-            id: `LOT-${String(current.length + 1).padStart(3, '0')}`,
-            product: data.product,
-            targetKilos: data.targetKilos,
-            currentKilos: 0,
-            basePrice: data.basePrice,
-            producer: data.producer,
-            deadline: data.deadline,
-        };
-        this.lots.set([...current, newLot]);
+        createdBy?: string | null;
+    }): Promise<Lot> {
+        const lot = await firstValueFrom(
+            this.http.post<Lot>(`${this.apiUrl}/lots`, {
+                product: data.product,
+                producer: data.producer,
+                targetKilos: data.targetKilos,
+                basePrice: data.basePrice,
+                deadline: data.deadline,
+                createdBy: data.createdBy ?? null,
+            })
+        );
+        this.lots.update((lots) => [...lots, lot]);
+        return lot;
     }
 }

@@ -5,12 +5,34 @@
       Pronóstico inteligente de demanda para tus productos
     </p>
   </header>
-  @if (predictionService.loading()) {
+  @if (marketService.lots().length > 0) {
+  <div class="mb-6">
+    <label class="block text-sm font-medium text-gray-700 mb-2"
+      >Selecciona un lote</label
+    >
+    <p-select
+      [options]="marketService.lots()"
+      [(ngModel)]="selectedLotId"
+      optionLabel="product"
+      optionValue="id"
+      placeholder="Elige un lote para predecir..."
+      class="w-full max-w-md"
+      styleClass="w-full"
+      (onChange)="onLotChange($event.value)"
+    >
+      <ng-template let-lot pTemplate="item">
+        <div>
+          <span class="font-medium">{{ lot.product }}</span>
+          <span class="text-xs text-gray-400 ml-2">{{ lot.id }}</span>
+        </div>
+      </ng-template>
+    </p-select>
+  </div>
+  } @if (predictionService.loading()) {
   <div class="flex justify-center py-16">
     <i class="pi pi-spin pi-spinner text-4xl text-[var(--primary)]"></i>
   </div>
-  }
-
+  } @if (predictionService.data(); as chartData) {
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div class="lg:col-span-2">
       <div class="bg-white rounded-2xl shadow-md p-6">
@@ -20,14 +42,12 @@
             Proyección anual de demanda
           </h2>
         </div>
-        @if (predictionService.data(); as chartData) {
         <p-chart
           type="line"
           [data]="chartData"
           [options]="chartOptions"
           styleClass="w-full"
         ></p-chart>
-        }
       </div>
     </div>
     <div>
@@ -65,4 +85,5 @@
       </div>
     </div>
   </div>
+  }
 </div>

@@ -1,10 +1,13 @@
 export interface Lot {
     basePrice: number;
+    createdAt?: string;
+    createdBy?: string;
     currentKilos: number;
     deadline: string;
     id: string;
     producer: string;
     product: string;
+    status?: string;
     targetKilos: number;
 }
 
@@ -18,6 +21,38 @@ export interface ChartData {
         tension: number;
     }[];
     labels: string[];
+}
+
+export interface User {
+    area: string | null;
+    businessSize: string | null;
+    companyName: string | null;
+    contactName: string;
+    createdAt: string;
+    email: string | null;
+    id: string;
+    phone: string | null;
+    products: string | null;
+    role: string;
+}
+
+export interface ImpactData {
+    activeLotes: number;
+    producerCount: number;
+    totalKilos: number;
+    totalProgress: number;
+    uniqueProducers: string[];
+}
+
+export interface CommitmentResponse {
+    commitment: {
+        id: string;
+        lotId: string;
+        userId: string | null;
+        kilos: number;
+        createdAt: string;
+    };
+    lot: Lot;
 }
 
 export interface BusinessProfile {

@@ -15,8 +15,11 @@
       </div>
     </ng-template>
     <ng-template pTemplate="content">
-      @if (step() === 1) {
+      @if (authMode() === 'login' && step() === 1) {
       <div>
+        <h2 class="text-lg font-semibold text-center text-gray-700 mb-4">
+          Iniciar sesion
+        </h2>
         <p class="text-center text-gray-500 text-sm mb-6">
           Selecciona tu perfil para continuar
         </p>
@@ -43,8 +46,128 @@
             Entrar como Productor
           </button>
         </div>
+        <p class="text-center text-sm text-gray-500 mt-6">
+          ¿No tienes cuenta?
+          <button
+            type="button"
+            class="text-[var(--primary)] font-medium hover:underline bg-transparent border-none cursor-pointer p-0"
+            (click)="toggleMode('register')"
+          >
+            Registrate aqui
+          </button>
+        </p>
       </div>
-      } @else if (step() === 2) {
+      } @else if (authMode() === 'login' && step() === 2) {
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <button
+            type="button"
+            pButton
+            pRipple
+            icon="pi pi-arrow-left"
+            styleClass="p-button-text p-button-sm p-button-rounded"
+            (click)="goBack()"
+          ></button>
+          <p class="text-sm text-gray-500">
+            Perfil:
+            <strong class="text-[var(--primary)]"
+              >{{ selectedRole() === 'pyme' ? 'PYME' : 'Productor' }}</strong
+            >
+          </p>
+        </div>
+        <h2 class="text-lg font-semibold text-center text-gray-700 mb-4">
+          Iniciar sesion
+        </h2>
+        @if (selectedRole() === 'pyme') {
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Correo electronico
+              <span class="text-red-500">*</span></label
+            >
+            <input
+              type="email"
+              pInputText
+              [(ngModel)]="email"
+              class="w-full"
+              placeholder="correo@empresa.com"
+            >
+          </div>
+        </div>
+        } @else {
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Numero de celular
+              <span class="text-red-500">*</span></label
+            >
+            <input
+              type="tel"
+              pInputText
+              [(ngModel)]="phone"
+              class="w-full"
+              placeholder="Ej: +57 300 123 4567"
+            >
+          </div>
+        </div>
+        }
+        <div class="mt-6">
+          <button
+            type="button"
+            pButton
+            pRipple
+            label="Iniciar sesion"
+            icon="pi pi-sign-in"
+            [disabled]="!isLoginFormValid() || submitting()"
+            [loading]="submitting()"
+            class="w-full !bg-[var(--primary)] !border-[var(--primary)]"
+            (click)="submitLogin()"
+          ></button>
+        </div>
+      </div>
+      } @else if (authMode() === 'register' && step() === 1) {
+      <div>
+        <h2 class="text-lg font-semibold text-center text-gray-700 mb-4">
+          Crear cuenta
+        </h2>
+        <p class="text-center text-gray-500 text-sm mb-6">
+          Selecciona tu perfil para continuar
+        </p>
+        <div class="flex flex-col gap-3">
+          <button
+            type="button"
+            pButton
+            pRipple
+            class="w-full"
+            styleClass="p-button-outlined py-3"
+            (click)="selectRole('pyme')"
+          >
+            <i class="pi pi-shop mr-2"></i>
+            Entrar como PYME
+          </button>
+          <button
+            type="button"
+            pButton
+            pRipple
+            class="w-full py-3 !bg-[var(--secondary)] !border-[var(--secondary)]"
+            (click)="selectRole('agro')"
+          >
+            <i class="pi pi-sun mr-2"></i>
+            Entrar como Productor
+          </button>
+        </div>
+        <p class="text-center text-sm text-gray-500 mt-6">
+          ¿Ya tienes cuenta?
+          <button
+            type="button"
+            class="text-[var(--primary)] font-medium hover:underline bg-transparent border-none cursor-pointer p-0"
+            (click)="toggleMode('login')"
+          >
+            Inicia sesion aqui
+          </button>
+        </p>
+      </div>
+      } @else if (authMode() === 'register' && step() === 2) {
       <div>
         <div class="flex items-center gap-2 mb-4">
           <button
@@ -144,7 +267,8 @@
             pRipple
             label="Continuar"
             icon="pi pi-arrow-right"
-            [disabled]="!isUserFormValid()"
+            [disabled]="!isUserFormValid() || submitting()"
+            [loading]="submitting()"
             class="w-full !bg-[var(--primary)] !border-[var(--primary)]"
             (click)="submitUserForm()"
           ></button>
@@ -232,7 +356,8 @@
             pRipple
             label="Guardar y continuar"
             icon="pi pi-check"
-            [disabled]="!isProfileValid()"
+            [disabled]="!isProfileValid() || submitting()"
+            [loading]="submitting()"
             class="w-full !bg-[var(--primary)] !border-[var(--primary)]"
             (click)="submitProfile()"
           ></button>
