@@ -37,7 +37,7 @@ Una vez validado el MVP, la plataforma transicionara a una infraestructura robus
 
 ```
 ├── backend/         # API REST (Python/FastAPI)
-│   ├── app.py       # Servidor principal
+│   ├── app/         # Servidor principal (FastAPI package)
 │   ├── schema.sql   # Esquema de base de datos
 │   └── requirements.txt
 ├── frontend/        # Aplicacion Angular + PrimeNG
@@ -73,7 +73,7 @@ pip install -r requirements.txt
 Editar `.env` con las credenciales de MySQL. La base de datos y tablas se crean automaticamente al iniciar
 
 ```bash
-uvicorn app:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 API disponible en `http://localhost:8000` y documentacion interactiva en `http://localhost:8000/docs`.
