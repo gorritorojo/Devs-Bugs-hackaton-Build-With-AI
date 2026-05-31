@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS lots (
   current_kilos DECIMAL(12,2) NOT NULL DEFAULT 0,
   base_price DECIMAL(12,2) NOT NULL,
   deadline DATETIME NOT NULL,
-  status ENUM('active', 'completed', 'expired') NOT NULL DEFAULT 'active',
+  status ENUM('active', 'completed', 'expired', 'deactivated') NOT NULL DEFAULT 'active',
   created_by CHAR(36) NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_lots_created_by FOREIGN KEY (created_by) REFERENCES users(id)
@@ -53,3 +53,7 @@ CREATE TABLE IF NOT EXISTS demand_predictions (
   CONSTRAINT fk_predictions_lot FOREIGN KEY (lot_id) REFERENCES lots(id)
     ON DELETE CASCADE
 );
+
+ALTER TABLE lots MODIFY status
+  ENUM('active', 'completed', 'expired', 'deactivated')
+  NOT NULL DEFAULT 'active';

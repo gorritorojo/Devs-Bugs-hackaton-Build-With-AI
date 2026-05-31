@@ -72,6 +72,11 @@ class CommitLot(BaseModel):
     kilos: float
     user_id: str | None = Field(default=None, alias="userId")
 
+
+class UpdateLotStatus(BaseModel):
+    status: str
+    user_id: str = Field(alias="userId")
+
     model_config = {"populate_by_name": True}
 
 
@@ -133,7 +138,7 @@ def init_db() -> None:
           current_kilos DECIMAL(12,2) NOT NULL DEFAULT 0,
           base_price DECIMAL(12,2) NOT NULL,
           deadline DATETIME NOT NULL,
-          status ENUM('active', 'completed', 'expired') NOT NULL DEFAULT 'active',
+          status ENUM('active', 'completed', 'expired', 'deactivated') NOT NULL DEFAULT 'active',
           created_by CHAR(36) NULL,
           created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
           CONSTRAINT fk_lots_created_by FOREIGN KEY (created_by) REFERENCES users(id)
@@ -171,6 +176,13 @@ def init_db() -> None:
     try:
         for statement in statements:
             cursor.execute(statement)
+        cursor.execute(
+            """
+            ALTER TABLE lots MODIFY status
+            ENUM('active', 'completed', 'expired', 'deactivated')
+            NOT NULL DEFAULT 'active'
+            """
+        )
         conn.commit()
     finally:
         cursor.close()
@@ -216,6 +228,7 @@ def refresh_lot_statuses() -> None:
           WHEN deadline < UTC_TIMESTAMP() THEN 'expired'
           ELSE 'active'
         END
+        WHERE status != 'deactivated'
         """
     )
 
@@ -422,6 +435,20 @@ def commit_to_lot(lot_id: str, payload: CommitLot):
         },
         "lot": lot,
     }
+
+
+@app.patch("/lots/{lot_id}/status")
+def update_lot_status(lot_id: str, payload: UpdateLotStatus):
+    lot = get_lot_or_404(lot_id)
+    if lot["created_by"] and lot["created_by"] != payload.user_id:
+        raise HTTPException(status_code=403, detail="No autorizado")
+    if payload.status not in ("active", "deactivated"):
+        raise HTTPException(status_code=400, detail="Estado inválido. Use 'active' o 'deactivated'")
+    execute(
+        "UPDATE lots SET status = %s WHERE id = %s",
+        (payload.status, lot_id),
+    )
+    return lot_to_api(get_lot_or_404(lot_id))
 
 
 @app.get("/lots/{lot_id}/prediction")
