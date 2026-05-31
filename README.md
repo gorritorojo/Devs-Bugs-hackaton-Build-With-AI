@@ -2,9 +2,9 @@
 
 ## integrantes:
 
-Renzo Valencia Gutierrez
-Andres Velasquez Villaroel
-Brayan Luna Monrroy
+* Renzo Valencia Gutierrez
+* Andres Velasquez Villaroel
+* Brayan Luna Monrroy
 
 ## link video YouTube
 
