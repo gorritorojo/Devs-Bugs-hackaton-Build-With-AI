@@ -23,6 +23,30 @@ export interface ChartData {
     labels: string[];
 }
 
+export interface DemandPrediction {
+    anio: number;
+    demanda_actual_kg: number;
+    demanda_estimada_kg: number;
+    mes: number;
+    producto: string;
+    tendencia: 'ALZA' | 'BAJA' | 'ESTABLE';
+    variacion_porcentual: number;
+}
+
+export interface PredictionResponse {
+    predicciones: DemandPrediction[];
+    producto: string;
+}
+
+export const PRODUCTS = [
+    'Arroz',
+    'Azucar',
+    'Maiz',
+    'Papa',
+    'Soya',
+    'Trigo',
+] as const;
+
 export interface User {
     area: string | null;
     businessSize: string | null;

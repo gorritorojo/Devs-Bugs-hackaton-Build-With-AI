@@ -1,63 +1,62 @@
-import { ChangeDetectionStrategy, Component, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import type { ChartOptions } from 'chart.js';
-import { ChartModule } from 'primeng/chart';
+import { ButtonModule } from 'primeng/button';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
-import { MarketService } from '../../core/services/market.service';
+import { PRODUCTS } from '../../core/models';
 import { PredictionService } from '../../core/services/prediction.service';
 
 @Component({
     selector: 'app-ai-predictor',
     templateUrl: './ai-predictor.component.html',
-    imports: [ChartModule, SelectModule, FormsModule],
+    imports: [SelectModule, FormsModule, InputNumberModule, ButtonModule],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AIPredictorComponent implements OnInit {
-    chartOptions: ChartOptions<'line'> = {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: { usePointStyle: true, padding: 20 },
-            },
-        },
-        scales: {
-            x: { grid: { display: false } },
-            y: {
-                beginAtZero: true,
-                ticks: { callback: (v) => ` ${v}  kg` },
-            },
-        },
-    };
-
+export class AIPredictorComponent {
     predictionService: PredictionService;
-    marketService: MarketService;
-    selectedLotId: string | null = null;
 
-    constructor(
-        predictionService: PredictionService,
-        marketService: MarketService,
-        route: ActivatedRoute
-    ) {
+    readonly products = PRODUCTS.map((p) => ({ label: p, value: p }));
+    readonly selectedProduct = signal<string | null>(null);
+    readonly months = signal(3);
+
+    constructor(predictionService: PredictionService) {
         this.predictionService = predictionService;
-        this.marketService = marketService;
-        const lotId = route.snapshot.queryParamMap.get('lotId');
-        if (lotId) {
-            this.selectedLotId = lotId;
+    }
+
+    onProductChange(productId: string) {
+        this.selectedProduct.set(productId);
+        this.predictionService.loadDemandPrediction(productId, this.months());
+    }
+
+    onPredict() {
+        const product = this.selectedProduct();
+        if (product) {
+            this.predictionService.loadDemandPrediction(product, this.months());
         }
     }
 
-    ngOnInit() {
-        this.marketService.loadLots();
-        if (this.selectedLotId) {
-            this.predictionService.loadDemandPrediction(this.selectedLotId);
-        }
+    getMonthName(month: number): string {
+        const names = [
+            'Enero',
+            'Febrero',
+            'Marzo',
+            'Abril',
+            'Mayo',
+            'Junio',
+            'Julio',
+            'Agosto',
+            'Septiembre',
+            'Octubre',
+            'Noviembre',
+            'Diciembre',
+        ];
+        return names[month - 1] ?? '';
     }
 
-    onLotChange(lotId: string) {
-        this.selectedLotId = lotId;
-        this.predictionService.loadDemandPrediction(lotId);
+    formatKg(value: number): string {
+        return new Intl.NumberFormat('es-BO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+        }).format(value);
     }
 }

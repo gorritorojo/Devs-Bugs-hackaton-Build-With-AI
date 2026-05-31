@@ -2,54 +2,132 @@
   <header class="hero">
     <h1 class="text-2xl font-bold text-gray-800">Predictor de Demanda IA</h1>
     <p class="text-gray-500 text-sm mt-1">
-      Pronóstico inteligente de demanda para tus productos
+      Pronóstico inteligente de demanda para tus productos agrícolas
     </p>
   </header>
-  @if (marketService.lots().length > 0) {
-  <div class="mb-6">
-    <label class="block text-sm font-medium text-gray-700 mb-2"
-      >Selecciona un lote</label
-    >
-    <p-select
-      [options]="marketService.lots()"
-      [(ngModel)]="selectedLotId"
-      optionLabel="product"
-      optionValue="id"
-      placeholder="Elige un lote para predecir..."
-      class="w-full max-w-md"
-      styleClass="w-full"
-      (onChange)="onLotChange($event.value)"
-    >
-      <ng-template let-lot pTemplate="item">
-        <div>
-          <span class="font-medium">{{ lot.product }}</span>
-          <span class="text-xs text-gray-400 ml-2">{{ lot.id }}</span>
-        </div>
-      </ng-template>
-    </p-select>
+
+  <div class="bg-white rounded-2xl shadow-md p-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Producto</label
+        >
+        <p-select
+          [options]="products"
+          [(ngModel)]="selectedProduct"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecciona un producto..."
+          styleClass="w-full"
+          (onChange)="onProductChange($event.value)"
+        ></p-select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Meses a predecir</label
+        >
+        <p-inputNumber
+          [(ngModel)]="months"
+          [min]="1"
+          [max]="12"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+          styleClass="w-full"
+        ></p-inputNumber>
+      </div>
+      <div>
+        <p-button
+          label="Predecir demanda"
+          icon="pi pi-chart-line"
+          [disabled]="!selectedProduct() || predictionService.loading()"
+          (onClick)="onPredict()"
+          styleClass="w-full"
+        ></p-button>
+      </div>
+    </div>
   </div>
-  } @if (predictionService.loading()) {
+  @if (predictionService.loading()) {
   <div class="flex justify-center py-16">
     <i class="pi pi-spin pi-spinner text-4xl text-[var(--primary)]"></i>
   </div>
-  } @if (predictionService.data(); as chartData) {
+  } @if (predictionService.error(); as errorMsg) {
+  <div class="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
+    <i class="pi pi-exclamation-triangle text-2xl text-red-500 mb-2"></i>
+    <p class="text-red-700 text-sm">{{ errorMsg }}</p>
+  </div>
+  } @if (predictionService.data(); as predictionData) {
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div class="lg:col-span-2">
       <div class="bg-white rounded-2xl shadow-md p-6">
         <div class="flex items-center gap-2 mb-6">
           <i class="pi pi-chart-line text-xl text-[var(--primary)]"></i>
           <h2 class="text-lg font-semibold text-gray-800">
-            Proyección anual de demanda
+            Predicción de demanda — {{ predictionData.producto }}
           </h2>
         </div>
-        <p-chart
-          type="line"
-          [data]="chartData"
-          [options]="chartOptions"
-          styleClass="w-full"
-        ></p-chart>
+
+        <div class="space-y-4">
+          @for (pred of predictionData.predicciones; track pred.mes) {
+          <div
+            class="flex items-center justify-between p-4 rounded-xl border"
+            [class]="{
+              'border-green-200 bg-green-50': pred.tendencia === 'ALZA',
+              'border-red-200 bg-red-50': pred.tendencia === 'BAJA',
+              'border-gray-200 bg-gray-50': pred.tendencia === 'ESTABLE'
+            }"
+          >
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                [class]="{
+                  'bg-green-500': pred.tendencia === 'ALZA',
+                  'bg-red-500': pred.tendencia === 'BAJA',
+                  'bg-gray-400': pred.tendencia === 'ESTABLE'
+                }"
+              >
+                @if (pred.tendencia === 'ALZA') {
+                <i class="pi pi-arrow-up text-lg"></i>
+                } @else if (pred.tendencia === 'BAJA') {
+                <i class="pi pi-arrow-down text-lg"></i>
+                } @else {
+                <i class="pi pi-minus text-lg"></i>
+                }
+              </div>
+              <div>
+                <p class="font-semibold text-gray-800">
+                  {{ getMonthName(pred.mes) }} {{ pred.anio }}
+                </p>
+                <p class="text-xs text-gray-500">Demanda estimada</p>
+              </div>
+            </div>
+
+            <div class="text-right">
+              <p class="text-xl font-bold text-gray-800">
+                {{ formatKg(pred.demanda_estimada_kg) }}
+                kg
+              </p>
+              <p
+                class="text-sm font-medium"
+                [class]="{
+                  'text-green-600': pred.tendencia === 'ALZA',
+                  'text-red-600': pred.tendencia === 'BAJA',
+                  'text-gray-500': pred.tendencia === 'ESTABLE'
+                }"
+              >
+                @if (pred.variacion_porcentual > 0) { +{{ pred.variacion_porcentual }}%
+                } @else {
+                {{ pred.variacion_porcentual }}% }
+                <span class="text-xs ml-1">vs actual</span>
+              </p>
+            </div>
+          </div>
+          }
+        </div>
       </div>
     </div>
+
     <div>
       <div
         class="bg-white rounded-2xl shadow-md border-t-4 sticky top-24 border-t-[var(--secondary)]"
@@ -59,20 +137,24 @@
           <div class="space-y-4 text-sm text-gray-600">
             <div class="flex items-center gap-3">
               <span
-                class="w-3 h-3 rounded-full inline-block bg-[var(--primary)]"
+                class="w-3 h-3 rounded-full inline-block bg-green-500"
               ></span>
-              <span>Línea sólida: datos históricos reales</span>
+              <span>Tendencia al alza (demanda creciente)</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="w-3 h-3 rounded-full inline-block bg-red-500"></span>
+              <span>Tendencia a la baja (demanda decreciente)</span>
             </div>
             <div class="flex items-center gap-3">
               <span
-                class="w-3 h-3 rounded-full inline-block border-2 border-dashed border-[var(--secondary)]"
+                class="w-3 h-3 rounded-full inline-block bg-gray-400"
               ></span>
-              <span>Línea punteada: predicción IA</span>
+              <span>Tendencia estable (sin cambios significativos)</span>
             </div>
             <div class="bg-yellow-50 p-4 rounded-xl text-xs text-yellow-800">
               <i class="pi pi-info-circle mr-1"></i>
-              La predicción se basa en tendencias históricas y estacionalidad
-              del mercado.
+              La predicción se basa en modelos de ML entrenados con datos
+              históricos de demanda, estacionalidad y tendencias del mercado.
             </div>
             <div class="bg-teal-50 p-4 rounded-xl text-xs text-teal-800">
               <i class="pi pi-lightbulb mr-1"></i>

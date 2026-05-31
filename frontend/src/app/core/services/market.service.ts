@@ -17,9 +17,11 @@ export class MarketService {
         try {
             const params: Record<string, string> = {};
             if (all) {
+                // biome-ignore lint/complexity/useLiteralKeys: required for Record<string, string>
                 params['all'] = 'true';
             }
             if (createdBy) {
+                // biome-ignore lint/complexity/useLiteralKeys: required for Record<string, string>
                 params['created_by'] = createdBy;
             }
             const options = Object.keys(params).length > 0 ? { params } : {};
